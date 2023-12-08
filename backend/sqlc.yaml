@@ -12,6 +12,7 @@ sql:
     schema: "sql/schema.sql"
     gen:
       go:
-        package: "tutorial"
-        out: "tutorial"
+        package: "db"
+        out: "internal/db"
         sql_package: "pgx/v5"
+        output_db_file_name: "queries.go"
