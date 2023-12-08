@@ -5,10 +5,12 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/Mateusz2734/wdai-project/backend/internal/db"
 	"github.com/Mateusz2734/wdai-project/backend/internal/password"
 	"github.com/Mateusz2734/wdai-project/backend/internal/request"
 	"github.com/Mateusz2734/wdai-project/backend/internal/response"
 	"github.com/Mateusz2734/wdai-project/backend/internal/validator"
+	"github.com/jackc/pgx/v5/pgtype"
 
 	"github.com/pascaldekloe/jwt"
 )
@@ -26,9 +28,10 @@ func (app *application) status(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) createUser(w http.ResponseWriter, r *http.Request) {
 	var input struct {
-		Email     string              `json:"Email"`
-		Password  string              `json:"Password"`
-		Validator validator.Validator `json:"-"`
+		Username        string              `json:"Username"`
+		DiscordUsername string              `json:"DiscordUsername"`
+		Password        string              `json:"Password"`
+		Validator       validator.Validator `json:"-"`
 	}
 
 	err := request.DecodeJSON(w, r, &input)
@@ -37,20 +40,23 @@ func (app *application) createUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	existingUser, err := app.db.GetUserByEmail(input.Email)
+	existingUser, err := app.db.GetUserByUsername(r.Context(), input.Username)
 	if err != nil {
 		app.serverError(w, r, err)
 		return
 	}
 
-	input.Validator.CheckField(input.Email != "", "Email", "Email is required")
-	input.Validator.CheckField(validator.Matches(input.Email, validator.RgxEmail), "Email", "Must be a valid email address")
-	input.Validator.CheckField(existingUser == nil, "Email", "Email is already in use")
+	input.Validator.CheckField(input.Username != "", "Username", "Username is required")
+	input.Validator.CheckField(existingUser == nil, "Username", "Username is already in use")
+	input.Validator.CheckField(len(input.Username) <= 30, "Username", "Username is too long")
 
 	input.Validator.CheckField(input.Password != "", "Password", "Password is required")
 	input.Validator.CheckField(len(input.Password) >= 8, "Password", "Password is too short")
 	input.Validator.CheckField(len(input.Password) <= 72, "Password", "Password is too long")
 	input.Validator.CheckField(validator.NotIn(input.Password, password.CommonPasswords...), "Password", "Password is too common")
+
+	input.Validator.CheckField(input.DiscordUsername != "", "DiscordUsername", "Discord Username is required")
+	input.Validator.CheckField(len(input.DiscordUsername) <= 72, "DiscordUsername", "Discord Username is too long")
 
 	if input.Validator.HasErrors() {
 		app.failedValidation(w, r, input.Validator)
@@ -63,7 +69,13 @@ func (app *application) createUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = app.db.InsertUser(input.Email, hashedPassword)
+	newUser := db.AddUserParams{
+		Username:        input.Username,
+		DiscordUsername: pgtype.Text{String: input.DiscordUsername, Valid: true},
+		PasswordHash:    hashedPassword,
+	}
+
+	_, err = app.db.AddUser(r.Context(), newUser)
 	if err != nil {
 		app.serverError(w, r, err)
 		return
@@ -74,7 +86,7 @@ func (app *application) createUser(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) createAuthenticationToken(w http.ResponseWriter, r *http.Request) {
 	var input struct {
-		Email     string              `json:"Email"`
+		Username  string              `json:"Username"`
 		Password  string              `json:"Password"`
 		Validator validator.Validator `json:"-"`
 	}
@@ -85,17 +97,17 @@ func (app *application) createAuthenticationToken(w http.ResponseWriter, r *http
 		return
 	}
 
-	user, err := app.db.GetUserByEmail(input.Email)
+	user, err := app.db.GetUserByUsername(r.Context(), input.Username)
 	if err != nil {
 		app.serverError(w, r, err)
 		return
 	}
 
-	input.Validator.CheckField(input.Email != "", "Email", "Email is required")
-	input.Validator.CheckField(user != nil, "Email", "Email address could not be found")
+	input.Validator.CheckField(input.Username != "", "Username", "Username is required")
+	input.Validator.CheckField(user != nil, "Username", "Username could not be found")
 
 	if user != nil {
-		passwordMatches, err := password.Matches(input.Password, user.HashedPassword)
+		passwordMatches, err := password.Matches(input.Password, user.PasswordHash)
 		if err != nil {
 			app.serverError(w, r, err)
 			return
@@ -111,7 +123,7 @@ func (app *application) createAuthenticationToken(w http.ResponseWriter, r *http
 	}
 
 	var claims jwt.Claims
-	claims.Subject = strconv.Itoa(user.ID)
+	claims.Subject = strconv.Itoa(int(user.UserID))
 
 	expiry := time.Now().Add(24 * time.Hour)
 	claims.Issued = jwt.NewNumericTime(time.Now())

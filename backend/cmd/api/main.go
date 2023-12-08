@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log/slog"
@@ -8,7 +9,7 @@ import (
 	"runtime/debug"
 	"sync"
 
-	"github.com/Mateusz2734/wdai-project/backend/internal/database"
+	"github.com/Mateusz2734/wdai-project/backend/internal/db"
 	"github.com/Mateusz2734/wdai-project/backend/internal/version"
 
 	"github.com/lmittmann/tint"
@@ -36,8 +37,7 @@ type config struct {
 		secretKey string
 	}
 	db struct {
-		dsn         string
-		automigrate bool
+		dsn string
 	}
 	jwt struct {
 		secretKey string
@@ -46,7 +46,7 @@ type config struct {
 
 type application struct {
 	config config
-	db     *database.DB
+	db     *db.DB
 	logger *slog.Logger
 	wg     sync.WaitGroup
 }
@@ -57,10 +57,9 @@ func run(logger *slog.Logger) error {
 	flag.StringVar(&cfg.baseURL, "base-url", "http://localhost:4444", "base URL for the application")
 	flag.IntVar(&cfg.httpPort, "http-port", 4444, "port to listen on for HTTP requests")
 	flag.StringVar(&cfg.basicAuth.username, "basic-auth-username", "admin", "basic auth username")
-	flag.StringVar(&cfg.basicAuth.hashedPassword, "basic-auth-hashed-password", "$2a$10$jRb2qniNcoCyQM23T59RfeEQUbgdAXfR6S0scynmKfJa5Gj3arGJa", "basic auth password hashed with bcrypt")
+	flag.StringVar(&cfg.basicAuth.hashedPassword, "basic-auth-hashed-password", "$2a$04$uwpFTia9dnbm6qQeNQnODuDGWECMcIXTIXZ..QnUO8wbvgJ/9zbr2", "basic auth password hashed with bcrypt")
 	flag.StringVar(&cfg.cookie.secretKey, "cookie-secret-key", "eksj5rzofufmxg5jjfqlzzvjhf3jdl5y", "secret key for cookie authentication/encryption")
-	flag.StringVar(&cfg.db.dsn, "db-dsn", "user:pass@localhost:5432/db", "postgreSQL DSN")
-	flag.BoolVar(&cfg.db.automigrate, "db-automigrate", true, "run migrations on startup")
+	flag.StringVar(&cfg.db.dsn, "db-dsn", "postgresql://admin:admin@localhost:5432/wdai?sslmode=disable", "postgreSQL DSN")
 	flag.StringVar(&cfg.jwt.secretKey, "jwt-secret-key", "hooi7qxyfyxucv6xzfag6ke4tp5ec3qi", "secret key for JWT authentication")
 
 	showVersion := flag.Bool("version", false, "display version and exit")
@@ -72,11 +71,11 @@ func run(logger *slog.Logger) error {
 		return nil
 	}
 
-	db, err := database.New(cfg.db.dsn, cfg.db.automigrate)
+	db, err := db.NewDB(cfg.db.dsn) //(cfg.db.dsn, cfg.db.automigrate)
 	if err != nil {
 		return err
 	}
-	defer db.Close()
+	defer db.Close(context.Background())
 
 	app := &application{
 		config: cfg,

@@ -88,7 +88,7 @@ func (app *application) authenticate(next http.Handler) http.Handler {
 					return
 				}
 
-				user, err := app.db.GetUser(userID)
+				user, err := app.db.GetUserById(r.Context(), int32(userID))
 				if err != nil {
 					app.serverError(w, r, err)
 					return
