@@ -9,7 +9,7 @@ sql:
       - "sql/stats.sql"
       - "sql/reviews.sql"
       - "sql/reports.sql"
-    schema: "sql/schema.sql"
+    schema: "sql/01-schema.sql"
     gen:
       go:
         package: "db"

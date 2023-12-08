@@ -1,0 +1,16 @@
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: db.dockerfile
+    image: "wdai_db"
+    container_name: database
+    environment:
+      POSTGRES_DB: wdai
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    # volumes:
+    #   - .:/db/:/data/postgres-tuto
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
