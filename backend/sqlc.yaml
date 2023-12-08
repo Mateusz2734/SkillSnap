@@ -16,3 +16,4 @@ sql:
         out: "internal/db"
         sql_package: "pgx/v5"
         output_db_file_name: "queries.go"
+        emit_result_struct_pointers: true

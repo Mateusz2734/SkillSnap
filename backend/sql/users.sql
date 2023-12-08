@@ -12,18 +12,18 @@ WHERE
 
 -- name: GetUsers :many
 SELECT
-    user_id, username, discord_username  
+    *
 FROM users;
 
 -- name: GetUserById :one 
 SELECT 
-    user_id, username, discord_username
+    *
 FROM users
 WHERE user_id = $1;
 
 -- name: GetUserByUsername :one
 SELECT 
-    user_id, username, discord_username
+    *
 FROM users
 WHERE username = $1;
 

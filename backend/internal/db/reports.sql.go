@@ -39,7 +39,7 @@ type AddReportParams struct {
 }
 
 // //////////////// REPORTS ////////////////
-func (q *Queries) AddReport(ctx context.Context, arg AddReportParams) (Report, error) {
+func (q *Queries) AddReport(ctx context.Context, arg AddReportParams) (*Report, error) {
 	row := q.db.QueryRow(ctx, addReport,
 		arg.ReportingUserID,
 		arg.ReportedUserID,
@@ -59,7 +59,7 @@ func (q *Queries) AddReport(ctx context.Context, arg AddReportParams) (Report, e
 		&i.Description,
 		&i.Status,
 	)
-	return i, err
+	return &i, err
 }
 
 const deleteReason = `-- name: DeleteReason :exec
@@ -121,7 +121,7 @@ WHERE
     report_id = $1
 `
 
-func (q *Queries) GetReportById(ctx context.Context, reportID int32) (Report, error) {
+func (q *Queries) GetReportById(ctx context.Context, reportID int32) (*Report, error) {
 	row := q.db.QueryRow(ctx, getReportById, reportID)
 	var i Report
 	err := row.Scan(
@@ -134,7 +134,7 @@ func (q *Queries) GetReportById(ctx context.Context, reportID int32) (Report, er
 		&i.Description,
 		&i.Status,
 	)
-	return i, err
+	return &i, err
 }
 
 const getReports = `-- name: GetReports :many
@@ -143,13 +143,13 @@ SELECT
 FROM reports
 `
 
-func (q *Queries) GetReports(ctx context.Context) ([]Report, error) {
+func (q *Queries) GetReports(ctx context.Context) ([]*Report, error) {
 	rows, err := q.db.Query(ctx, getReports)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Report
+	var items []*Report
 	for rows.Next() {
 		var i Report
 		if err := rows.Scan(
@@ -164,7 +164,7 @@ func (q *Queries) GetReports(ctx context.Context) ([]Report, error) {
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -180,13 +180,13 @@ WHERE
     reason = $1
 `
 
-func (q *Queries) GetReportsByReason(ctx context.Context, reason string) ([]Report, error) {
+func (q *Queries) GetReportsByReason(ctx context.Context, reason string) ([]*Report, error) {
 	rows, err := q.db.Query(ctx, getReportsByReason, reason)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Report
+	var items []*Report
 	for rows.Next() {
 		var i Report
 		if err := rows.Scan(
@@ -201,7 +201,7 @@ func (q *Queries) GetReportsByReason(ctx context.Context, reason string) ([]Repo
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -217,13 +217,13 @@ WHERE
     reported_offer_id = $1
 `
 
-func (q *Queries) GetReportsByReportedOffer(ctx context.Context, reportedOfferID pgtype.Int4) ([]Report, error) {
+func (q *Queries) GetReportsByReportedOffer(ctx context.Context, reportedOfferID pgtype.Int4) ([]*Report, error) {
 	rows, err := q.db.Query(ctx, getReportsByReportedOffer, reportedOfferID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Report
+	var items []*Report
 	for rows.Next() {
 		var i Report
 		if err := rows.Scan(
@@ -238,7 +238,7 @@ func (q *Queries) GetReportsByReportedOffer(ctx context.Context, reportedOfferID
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -254,13 +254,13 @@ WHERE
     reported_user_id = $1
 `
 
-func (q *Queries) GetReportsByReportedUser(ctx context.Context, reportedUserID pgtype.Int4) ([]Report, error) {
+func (q *Queries) GetReportsByReportedUser(ctx context.Context, reportedUserID pgtype.Int4) ([]*Report, error) {
 	rows, err := q.db.Query(ctx, getReportsByReportedUser, reportedUserID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Report
+	var items []*Report
 	for rows.Next() {
 		var i Report
 		if err := rows.Scan(
@@ -275,7 +275,7 @@ func (q *Queries) GetReportsByReportedUser(ctx context.Context, reportedUserID p
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err

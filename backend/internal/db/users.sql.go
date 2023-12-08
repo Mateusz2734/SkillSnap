@@ -44,11 +44,11 @@ type AddUserRow struct {
 }
 
 // //////////////// USERS ////////////////
-func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) (AddUserRow, error) {
+func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) (*AddUserRow, error) {
 	row := q.db.QueryRow(ctx, addUser, arg.Username, arg.DiscordUsername, arg.PasswordHash)
 	var i AddUserRow
 	err := row.Scan(&i.UserID, &i.Username, &i.DiscordUsername)
-	return i, err
+	return &i, err
 }
 
 const deleteAdmin = `-- name: DeleteAdmin :exec
@@ -103,69 +103,69 @@ func (q *Queries) GetAdmins(ctx context.Context) ([]pgtype.Int4, error) {
 
 const getUserById = `-- name: GetUserById :one
 SELECT 
-    user_id, username, discord_username
+    created_at, user_id, username, discord_username, password_hash
 FROM users
 WHERE user_id = $1
 `
 
-type GetUserByIdRow struct {
-	UserID          int32
-	Username        string
-	DiscordUsername pgtype.Text
-}
-
-func (q *Queries) GetUserById(ctx context.Context, userID int32) (GetUserByIdRow, error) {
+func (q *Queries) GetUserById(ctx context.Context, userID int32) (*User, error) {
 	row := q.db.QueryRow(ctx, getUserById, userID)
-	var i GetUserByIdRow
-	err := row.Scan(&i.UserID, &i.Username, &i.DiscordUsername)
-	return i, err
+	var i User
+	err := row.Scan(
+		&i.CreatedAt,
+		&i.UserID,
+		&i.Username,
+		&i.DiscordUsername,
+		&i.PasswordHash,
+	)
+	return &i, err
 }
 
 const getUserByUsername = `-- name: GetUserByUsername :one
 SELECT 
-    user_id, username, discord_username
+    created_at, user_id, username, discord_username, password_hash
 FROM users
 WHERE username = $1
 `
 
-type GetUserByUsernameRow struct {
-	UserID          int32
-	Username        string
-	DiscordUsername pgtype.Text
-}
-
-func (q *Queries) GetUserByUsername(ctx context.Context, username string) (GetUserByUsernameRow, error) {
+func (q *Queries) GetUserByUsername(ctx context.Context, username string) (*User, error) {
 	row := q.db.QueryRow(ctx, getUserByUsername, username)
-	var i GetUserByUsernameRow
-	err := row.Scan(&i.UserID, &i.Username, &i.DiscordUsername)
-	return i, err
+	var i User
+	err := row.Scan(
+		&i.CreatedAt,
+		&i.UserID,
+		&i.Username,
+		&i.DiscordUsername,
+		&i.PasswordHash,
+	)
+	return &i, err
 }
 
 const getUsers = `-- name: GetUsers :many
 SELECT
-    user_id, username, discord_username  
+    created_at, user_id, username, discord_username, password_hash
 FROM users
 `
 
-type GetUsersRow struct {
-	UserID          int32
-	Username        string
-	DiscordUsername pgtype.Text
-}
-
-func (q *Queries) GetUsers(ctx context.Context) ([]GetUsersRow, error) {
+func (q *Queries) GetUsers(ctx context.Context) ([]*User, error) {
 	rows, err := q.db.Query(ctx, getUsers)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetUsersRow
+	var items []*User
 	for rows.Next() {
-		var i GetUsersRow
-		if err := rows.Scan(&i.UserID, &i.Username, &i.DiscordUsername); err != nil {
+		var i User
+		if err := rows.Scan(
+			&i.CreatedAt,
+			&i.UserID,
+			&i.Username,
+			&i.DiscordUsername,
+			&i.PasswordHash,
+		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err

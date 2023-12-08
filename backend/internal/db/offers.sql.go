@@ -21,7 +21,7 @@ type AddOfferParams struct {
 	Description string
 }
 
-func (q *Queries) AddOffer(ctx context.Context, arg AddOfferParams) (Offer, error) {
+func (q *Queries) AddOffer(ctx context.Context, arg AddOfferParams) (*Offer, error) {
 	row := q.db.QueryRow(ctx, addOffer, arg.UserID, arg.Skill, arg.Description)
 	var i Offer
 	err := row.Scan(
@@ -31,7 +31,7 @@ func (q *Queries) AddOffer(ctx context.Context, arg AddOfferParams) (Offer, erro
 		&i.Skill,
 		&i.Description,
 	)
-	return i, err
+	return &i, err
 }
 
 const deleteOffer = `-- name: DeleteOffer :exec
@@ -54,7 +54,7 @@ WHERE
     offer_id = $1
 `
 
-func (q *Queries) GetOfferById(ctx context.Context, offerID int32) (Offer, error) {
+func (q *Queries) GetOfferById(ctx context.Context, offerID int32) (*Offer, error) {
 	row := q.db.QueryRow(ctx, getOfferById, offerID)
 	var i Offer
 	err := row.Scan(
@@ -64,7 +64,7 @@ func (q *Queries) GetOfferById(ctx context.Context, offerID int32) (Offer, error
 		&i.Skill,
 		&i.Description,
 	)
-	return i, err
+	return &i, err
 }
 
 const getOffers = `-- name: GetOffers :many
@@ -80,13 +80,13 @@ type GetOffersParams struct {
 	Offset int32
 }
 
-func (q *Queries) GetOffers(ctx context.Context, arg GetOffersParams) ([]Offer, error) {
+func (q *Queries) GetOffers(ctx context.Context, arg GetOffersParams) ([]*Offer, error) {
 	rows, err := q.db.Query(ctx, getOffers, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Offer
+	var items []*Offer
 	for rows.Next() {
 		var i Offer
 		if err := rows.Scan(
@@ -98,7 +98,7 @@ func (q *Queries) GetOffers(ctx context.Context, arg GetOffersParams) ([]Offer, 
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -127,13 +127,13 @@ type GetOffersByCategoryParams struct {
 	Offset   int32
 }
 
-func (q *Queries) GetOffersByCategory(ctx context.Context, arg GetOffersByCategoryParams) ([]Offer, error) {
+func (q *Queries) GetOffersByCategory(ctx context.Context, arg GetOffersByCategoryParams) ([]*Offer, error) {
 	rows, err := q.db.Query(ctx, getOffersByCategory, arg.Category, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Offer
+	var items []*Offer
 	for rows.Next() {
 		var i Offer
 		if err := rows.Scan(
@@ -145,7 +145,7 @@ func (q *Queries) GetOffersByCategory(ctx context.Context, arg GetOffersByCatego
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -161,13 +161,13 @@ WHERE
     user_id = $1
 `
 
-func (q *Queries) GetOffersByUser(ctx context.Context, userID int32) ([]Offer, error) {
+func (q *Queries) GetOffersByUser(ctx context.Context, userID int32) ([]*Offer, error) {
 	rows, err := q.db.Query(ctx, getOffersByUser, userID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Offer
+	var items []*Offer
 	for rows.Next() {
 		var i Offer
 		if err := rows.Scan(
@@ -179,7 +179,7 @@ func (q *Queries) GetOffersByUser(ctx context.Context, userID int32) ([]Offer, e
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err

@@ -1,7 +1,7 @@
 INSERT INTO users (username, discord_username, password_hash)
 VALUES
-('admin', 'admin', 'c93ccd78b2076528346216b3b2f701e6'), --password: admin1234
-('user', 'user', 'b5b73fae0d87d8b4e2573105f8fbe7bc'); --password: user1234
+('admin', 'admin', '$2a$04$uwpFTia9dnbm6qQeNQnODuDGWECMcIXTIXZ..QnUO8wbvgJ/9zbr2'), --password: admin1234
+('user', 'user', '$2a$04$mUnuGk9mrOH2ai7hE6f40.83I/cyr.qqS4wTO9YNxrnOF26UQ3nIm'); --password: user1234
 
 
 INSERT INTO admins 

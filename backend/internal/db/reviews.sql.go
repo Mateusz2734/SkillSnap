@@ -22,7 +22,7 @@ type AddReviewParams struct {
 	Review          string
 }
 
-func (q *Queries) AddReview(ctx context.Context, arg AddReviewParams) (Review, error) {
+func (q *Queries) AddReview(ctx context.Context, arg AddReviewParams) (*Review, error) {
 	row := q.db.QueryRow(ctx, addReview,
 		arg.ReviewingUserID,
 		arg.ReviewedUserID,
@@ -38,7 +38,7 @@ func (q *Queries) AddReview(ctx context.Context, arg AddReviewParams) (Review, e
 		&i.StarCount,
 		&i.Review,
 	)
-	return i, err
+	return &i, err
 }
 
 const deleteReview = `-- name: DeleteReview :exec
@@ -60,7 +60,7 @@ FROM reviews
 WHERE review_id = $1
 `
 
-func (q *Queries) GetReviewById(ctx context.Context, reviewID int32) (Review, error) {
+func (q *Queries) GetReviewById(ctx context.Context, reviewID int32) (*Review, error) {
 	row := q.db.QueryRow(ctx, getReviewById, reviewID)
 	var i Review
 	err := row.Scan(
@@ -71,7 +71,7 @@ func (q *Queries) GetReviewById(ctx context.Context, reviewID int32) (Review, er
 		&i.StarCount,
 		&i.Review,
 	)
-	return i, err
+	return &i, err
 }
 
 const getReviews = `-- name: GetReviews :many
@@ -80,13 +80,13 @@ SELECT
 FROM reviews
 `
 
-func (q *Queries) GetReviews(ctx context.Context) ([]Review, error) {
+func (q *Queries) GetReviews(ctx context.Context) ([]*Review, error) {
 	rows, err := q.db.Query(ctx, getReviews)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Review
+	var items []*Review
 	for rows.Next() {
 		var i Review
 		if err := rows.Scan(
@@ -99,7 +99,7 @@ func (q *Queries) GetReviews(ctx context.Context) ([]Review, error) {
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -114,13 +114,13 @@ FROM reviews
 WHERE reviewed_user_id = $1
 `
 
-func (q *Queries) GetReviewsByReviewedUser(ctx context.Context, reviewedUserID int32) ([]Review, error) {
+func (q *Queries) GetReviewsByReviewedUser(ctx context.Context, reviewedUserID int32) ([]*Review, error) {
 	rows, err := q.db.Query(ctx, getReviewsByReviewedUser, reviewedUserID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Review
+	var items []*Review
 	for rows.Next() {
 		var i Review
 		if err := rows.Scan(
@@ -133,7 +133,7 @@ func (q *Queries) GetReviewsByReviewedUser(ctx context.Context, reviewedUserID i
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -148,13 +148,13 @@ FROM reviews
 WHERE reviewing_user_id = $1
 `
 
-func (q *Queries) GetReviewsByReviewingUser(ctx context.Context, reviewingUserID int32) ([]Review, error) {
+func (q *Queries) GetReviewsByReviewingUser(ctx context.Context, reviewingUserID int32) ([]*Review, error) {
 	rows, err := q.db.Query(ctx, getReviewsByReviewingUser, reviewingUserID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Review
+	var items []*Review
 	for rows.Next() {
 		var i Review
 		if err := rows.Scan(
@@ -167,7 +167,7 @@ func (q *Queries) GetReviewsByReviewingUser(ctx context.Context, reviewingUserID
 		); err != nil {
 			return nil, err
 		}
-		items = append(items, i)
+		items = append(items, &i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err

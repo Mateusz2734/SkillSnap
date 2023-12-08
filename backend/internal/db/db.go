@@ -18,7 +18,7 @@ func NewDB(dsn string) (*DB, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), defaultTimeout)
 	defer cancel()
 
-	conn, err := pgx.Connect(ctx, "user=pqgotest dbname=pqgotest sslmode=verify-full")
+	conn, err := pgx.Connect(ctx, dsn)
 
 	if err != nil {
 		return nil, err
