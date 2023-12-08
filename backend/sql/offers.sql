@@ -1,11 +1,45 @@
--- Add offer
+-- name: AddOffer :one
+INSERT INTO offers (user_id, skill, description)
+VALUES
+    ($1, $2, $3) RETURNING *;
 
--- Delete offer
+-- name: DeleteOffer :exec
+DELETE FROM
+    offers
+WHERE
+    offer_id = $1;
 
--- Get offers
+-- name: GetOffers :many
+SELECT
+    *
+FROM offers
+LIMIT $1
+OFFSET $2;
 
--- Get offer by id
+-- name: GetOfferById :one
+SELECT
+    *
+FROM offers
+WHERE
+    offer_id = $1;
 
--- Get offers by user
+-- name: GetOffersByUser :many
+SELECT
+    *
+FROM offers
+WHERE
+    user_id = $1;
 
--- Get offers by category
+-- name: GetOffersByCategory :many
+SELECT
+    created_at,
+    offer_id,
+    user_id,
+    offers.skill,
+    description
+FROM offers
+INNER JOIN skills ON offers.skill = skills.skill
+INNER JOIN skill_categories ON skills.skill = skill_categories.skill
+WHERE skill_categories.category = $1
+LIMIT $2
+OFFSET $3;

@@ -1,5 +1,15 @@
--- Add category
+-- name: AddCategory :one
+INSERT INTO categories (category)
+VALUES
+    ($1) RETURNING *;
 
--- Delete category
+-- name: DeleteCategory :exec
+DELETE FROM
+    categories
+WHERE
+    category = $1;
 
--- Get categories
+-- name: GetCategories :many
+SELECT
+    *
+FROM categories;

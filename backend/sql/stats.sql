@@ -1,16 +1,55 @@
--- Get offer count by user
+-- name: GetOfferCountByUser :one
+SELECT
+    COUNT(*)
+FROM offers
+WHERE
+    user_id = $1;
 
--- Get report count by user
+-- name: GetReportCountByUser :one
+SELECT
+    COUNT(*)
+FROM reports
+WHERE
+    reported_user_id = $1;
 
--- Get review count by user
+-- name: GetReviewCountByUser :one
+SELECT
+    COUNT(*)
+FROM reviews
+WHERE reviewing_user_id = $1;
 
--- Get review count by star_count
 
--- Get average star_count by user
+-- name: GetReviewCountByStars :one
+SELECT COUNT(*)
+FROM reviews
+GROUP BY star_count;
 
--- Get user count
 
--- Get offer count by category
+-- name: GetAverageStarsByUser :one
+SELECT
+    AVG(star_count)
+FROM reviews
+WHERE
+    reviewed_user_id = $1;
 
--- Get offer count by skill
+-- name: GetUserCount :one
+SELECT
+    COUNT(*)
+FROM users;
 
+-- name: GetOfferCountByCategory :one
+SELECT COUNT(skill_categories.category)
+FROM offers
+INNER JOIN skills ON offers.skill = skills.skill
+INNER JOIN skill_categories ON skills.skill = skill_categories.skill
+GROUP BY skill_categories.category;
+
+-- name: GetOfferCountBySkill :one
+SELECT COUNT(*)
+FROM offers
+GROUP BY skill;
+
+-- name: GetOfferCount :one
+SELECT
+    COUNT(*)
+FROM offers;

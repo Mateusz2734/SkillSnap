@@ -1,21 +1,61 @@
 -- //////////////// REPORTS ////////////////
--- Add report
+-- name: AddReport :one
+INSERT INTO reports (reporting_user_id, reported_user_id, reported_offer_id, reason, description, status)
+VALUES
+    ($1, $2, $3, $4, $5, $6) RETURNING *;
 
--- Delete report
+-- name: DeleteReport :exec
+DELETE FROM
+    reports
+WHERE
+    report_id = $1;
 
--- Get reports
+-- name: GetReports :many
+SELECT
+    *
+FROM reports;
 
--- Get report by id
+-- name: GetReportById :one
+SELECT
+    *
+FROM reports
+WHERE
+    report_id = $1;
 
--- Get reports by reported user
+-- name: GetReportsByReportedUser :many
+SELECT
+    *
+FROM reports
+WHERE
+    reported_user_id = $1;
 
--- Get reports by reported offer
+-- name: GetReportsByReportedOffer :many
+SELECT
+    *
+FROM reports
+WHERE
+    reported_offer_id = $1;
 
--- Get reports by reason
+-- name: GetReportsByReason :many
+SELECT
+    *
+FROM reports
+WHERE
+    reason = $1;
 
 -- //////////////// REASONS ////////////////
--- Get reasons
+-- name: GetReasons :many
+SELECT
+    *
+FROM report_reasons;
 
--- Add reason
+-- name: AddReason :one
+INSERT INTO report_reasons (reason)
+VALUES
+    ($1) RETURNING *;
 
--- Delete reason
+-- name: DeleteReason :exec
+DELETE FROM
+    report_reasons
+WHERE
+    reason = $1;

@@ -1,17 +1,45 @@
 -- //////////////// USERS ////////////////
--- Add user
+-- name: AddUser :one
+INSERT INTO users (username, discord_username, password_hash)
+VALUES
+    ($1, $2, $3) RETURNING user_id, username, discord_username;
 
--- Delete user
+-- name: DeleteUser :exec
+DELETE FROM 
+    users 
+WHERE 
+    user_id = $1;
 
--- Get users
+-- name: GetUsers :many
+SELECT
+    user_id, username, discord_username  
+FROM users;
 
--- Get user by id
+-- name: GetUserById :one 
+SELECT 
+    user_id, username, discord_username
+FROM users
+WHERE user_id = $1;
 
--- Get user by username
+-- name: GetUserByUsername :one
+SELECT 
+    user_id, username, discord_username
+FROM users
+WHERE username = $1;
 
 -- //////////////// ADMINS ////////////////
--- Add admin
+-- name: AddAdmin :one
+INSERT INTO admins (user_id)
+VALUES
+    ($1) RETURNING *;
 
--- Delete admin
+-- name: DeleteAdmin :exec
+DELETE FROM
+    admins
+WHERE
+    user_id = $1;
 
--- Get admins
+-- name: GetAdmins :many
+SELECT
+    *
+FROM admins;

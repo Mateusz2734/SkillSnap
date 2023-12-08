@@ -1,11 +1,33 @@
--- Add review
+-- name: AddReview :one
+INSERT INTO reviews (reviewing_user_id, reviewed_user_id, star_count, review)
+VALUES
+    ($1, $2, $3, $4) RETURNING *;
 
--- Delete review
+-- name: DeleteReview :exec
+DELETE FROM
+    reviews
+WHERE
+    review_id = $1;
 
--- Get reviews
+-- name: GetReviews :many
+SELECT
+    *
+FROM reviews;
 
--- Get review by id
+-- name: GetReviewById :one
+SELECT
+    *
+FROM reviews
+WHERE review_id = $1;
 
--- Get reviews by reviewed user
+-- name: GetReviewsByReviewedUser :many
+SELECT
+    *
+FROM reviews
+WHERE reviewed_user_id = $1;
 
--- Get reviews by reviewing user
+-- name: GetReviewsByReviewingUser :many
+SELECT
+    *
+FROM reviews
+WHERE reviewing_user_id = $1;

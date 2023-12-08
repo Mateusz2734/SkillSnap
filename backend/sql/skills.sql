@@ -1,5 +1,15 @@
--- Add skill
+-- name: AddSkill :one
+INSERT INTO skills (skill)
+VALUES
+    ($1) RETURNING *;
 
--- Delete skill
+-- name: DeleteSkill :exec
+DELETE FROM
+    skills
+WHERE
+    skill = $1;
 
--- Get skills
+-- name: GetSkills :many
+SELECT
+    *
+FROM skills;

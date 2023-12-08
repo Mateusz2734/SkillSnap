@@ -1,0 +1,17 @@
+version: "2"
+sql:
+  - engine: "postgresql"
+    queries: 
+      - "sql/offers.sql"
+      - "sql/categories.sql"
+      - "sql/skills.sql"
+      - "sql/users.sql"
+      - "sql/stats.sql"
+      - "sql/reviews.sql"
+      - "sql/reports.sql"
+    schema: "sql/schema.sql"
+    gen:
+      go:
+        package: "tutorial"
+        out: "tutorial"
+        sql_package: "pgx/v5"
