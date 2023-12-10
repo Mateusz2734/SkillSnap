@@ -29,17 +29,24 @@ WHERE username = $1;
 
 -- //////////////// ADMINS ////////////////
 -- name: AddAdmin :one
-INSERT INTO admins (user_id)
-VALUES
-    ($1) RETURNING *;
+UPDATE users 
+SET role = 'admin' 
+WHERE user_id = $1 RETURNING *;
+
 
 -- name: DeleteAdmin :exec
-DELETE FROM
-    admins
-WHERE
-    user_id = $1;
+UPDATE users
+SET role = 'user'
+WHERE user_id = $1 RETURNING *;
 
 -- name: GetAdmins :many
 SELECT
     *
-FROM admins;
+FROM users
+WHERE role = 'admin';
+
+-- name: GetAdminByUserId :one
+SELECT
+    *
+FROM users
+WHERE user_id = $1 AND role = 'admin';

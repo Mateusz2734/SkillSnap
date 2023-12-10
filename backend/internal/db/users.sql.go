@@ -12,17 +12,24 @@ import (
 )
 
 const addAdmin = `-- name: AddAdmin :one
-INSERT INTO admins (user_id)
-VALUES
-    ($1) RETURNING user_id
+UPDATE users 
+SET role = 'admin' 
+WHERE user_id = $1 RETURNING created_at, user_id, username, discord_username, password_hash, role
 `
 
 // //////////////// ADMINS ////////////////
-func (q *Queries) AddAdmin(ctx context.Context, userID pgtype.Int4) (pgtype.Int4, error) {
+func (q *Queries) AddAdmin(ctx context.Context, userID int32) (*User, error) {
 	row := q.db.QueryRow(ctx, addAdmin, userID)
-	var user_id pgtype.Int4
-	err := row.Scan(&user_id)
-	return user_id, err
+	var i User
+	err := row.Scan(
+		&i.CreatedAt,
+		&i.UserID,
+		&i.Username,
+		&i.DiscordUsername,
+		&i.PasswordHash,
+		&i.Role,
+	)
+	return &i, err
 }
 
 const addUser = `-- name: AddUser :one
@@ -52,13 +59,12 @@ func (q *Queries) AddUser(ctx context.Context, arg AddUserParams) (*AddUserRow, 
 }
 
 const deleteAdmin = `-- name: DeleteAdmin :exec
-DELETE FROM
-    admins
-WHERE
-    user_id = $1
+UPDATE users
+SET role = 'user'
+WHERE user_id = $1 RETURNING created_at, user_id, username, discord_username, password_hash, role
 `
 
-func (q *Queries) DeleteAdmin(ctx context.Context, userID pgtype.Int4) error {
+func (q *Queries) DeleteAdmin(ctx context.Context, userID int32) error {
 	_, err := q.db.Exec(ctx, deleteAdmin, userID)
 	return err
 }
@@ -75,25 +81,54 @@ func (q *Queries) DeleteUser(ctx context.Context, userID int32) error {
 	return err
 }
 
-const getAdmins = `-- name: GetAdmins :many
+const getAdminByUserId = `-- name: GetAdminByUserId :one
 SELECT
-    user_id
-FROM admins
+    created_at, user_id, username, discord_username, password_hash, role
+FROM users
+WHERE user_id = $1 AND role = 'admin'
 `
 
-func (q *Queries) GetAdmins(ctx context.Context) ([]pgtype.Int4, error) {
+func (q *Queries) GetAdminByUserId(ctx context.Context, userID int32) (*User, error) {
+	row := q.db.QueryRow(ctx, getAdminByUserId, userID)
+	var i User
+	err := row.Scan(
+		&i.CreatedAt,
+		&i.UserID,
+		&i.Username,
+		&i.DiscordUsername,
+		&i.PasswordHash,
+		&i.Role,
+	)
+	return &i, err
+}
+
+const getAdmins = `-- name: GetAdmins :many
+SELECT
+    created_at, user_id, username, discord_username, password_hash, role
+FROM users
+WHERE role = 'admin'
+`
+
+func (q *Queries) GetAdmins(ctx context.Context) ([]*User, error) {
 	rows, err := q.db.Query(ctx, getAdmins)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []pgtype.Int4
+	var items []*User
 	for rows.Next() {
-		var user_id pgtype.Int4
-		if err := rows.Scan(&user_id); err != nil {
+		var i User
+		if err := rows.Scan(
+			&i.CreatedAt,
+			&i.UserID,
+			&i.Username,
+			&i.DiscordUsername,
+			&i.PasswordHash,
+			&i.Role,
+		); err != nil {
 			return nil, err
 		}
-		items = append(items, user_id)
+		items = append(items, &i)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
@@ -103,7 +138,7 @@ func (q *Queries) GetAdmins(ctx context.Context) ([]pgtype.Int4, error) {
 
 const getUserById = `-- name: GetUserById :one
 SELECT 
-    created_at, user_id, username, discord_username, password_hash
+    created_at, user_id, username, discord_username, password_hash, role
 FROM users
 WHERE user_id = $1
 `
@@ -117,13 +152,14 @@ func (q *Queries) GetUserById(ctx context.Context, userID int32) (*User, error) 
 		&i.Username,
 		&i.DiscordUsername,
 		&i.PasswordHash,
+		&i.Role,
 	)
 	return &i, err
 }
 
 const getUserByUsername = `-- name: GetUserByUsername :one
 SELECT 
-    created_at, user_id, username, discord_username, password_hash
+    created_at, user_id, username, discord_username, password_hash, role
 FROM users
 WHERE username = $1
 `
@@ -137,13 +173,14 @@ func (q *Queries) GetUserByUsername(ctx context.Context, username string) (*User
 		&i.Username,
 		&i.DiscordUsername,
 		&i.PasswordHash,
+		&i.Role,
 	)
 	return &i, err
 }
 
 const getUsers = `-- name: GetUsers :many
 SELECT
-    created_at, user_id, username, discord_username, password_hash
+    created_at, user_id, username, discord_username, password_hash, role
 FROM users
 `
 
@@ -162,6 +199,7 @@ func (q *Queries) GetUsers(ctx context.Context) ([]*User, error) {
 			&i.Username,
 			&i.DiscordUsername,
 			&i.PasswordHash,
+			&i.Role,
 		); err != nil {
 			return nil, err
 		}

@@ -4,9 +4,9 @@ VALUES
 ('user', 'user', '$2a$04$mUnuGk9mrOH2ai7hE6f40.83I/cyr.qqS4wTO9YNxrnOF26UQ3nIm'); --password: user1234
 
 
-INSERT INTO admins 
-VALUES
-(1);
+UPDATE users
+SET role = 'admin'
+WHERE username = 'admin';
 
 INSERT INTO skills VALUES 
 ('JavaScript programming'),
