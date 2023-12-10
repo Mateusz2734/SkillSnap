@@ -13,17 +13,22 @@ import (
 
 const getAverageStarsByUser = `-- name: GetAverageStarsByUser :one
 SELECT
-    AVG(star_count)
+    reviewed_user_id, AVG(star_count)
 FROM reviews
 WHERE
     reviewed_user_id = $1
 `
 
-func (q *Queries) GetAverageStarsByUser(ctx context.Context, reviewedUserID int32) (float64, error) {
+type GetAverageStarsByUserRow struct {
+	ReviewedUserID int32
+	Avg            float64
+}
+
+func (q *Queries) GetAverageStarsByUser(ctx context.Context, reviewedUserID int32) (*GetAverageStarsByUserRow, error) {
 	row := q.db.QueryRow(ctx, getAverageStarsByUser, reviewedUserID)
-	var avg float64
-	err := row.Scan(&avg)
-	return avg, err
+	var i GetAverageStarsByUserRow
+	err := row.Scan(&i.ReviewedUserID, &i.Avg)
+	return &i, err
 }
 
 const getOfferCount = `-- name: GetOfferCount :one
@@ -39,89 +44,158 @@ func (q *Queries) GetOfferCount(ctx context.Context) (int64, error) {
 	return count, err
 }
 
-const getOfferCountByCategory = `-- name: GetOfferCountByCategory :one
-SELECT COUNT(skill_categories.category)
+const getOfferCountByCategory = `-- name: GetOfferCountByCategory :many
+SELECT skill_categories.category, COUNT(skill_categories.category)
 FROM offers
 INNER JOIN skills ON offers.skill = skills.skill
 INNER JOIN skill_categories ON skills.skill = skill_categories.skill
 GROUP BY skill_categories.category
 `
 
-func (q *Queries) GetOfferCountByCategory(ctx context.Context) (int64, error) {
-	row := q.db.QueryRow(ctx, getOfferCountByCategory)
-	var count int64
-	err := row.Scan(&count)
-	return count, err
+type GetOfferCountByCategoryRow struct {
+	Category string
+	Count    int64
 }
 
-const getOfferCountBySkill = `-- name: GetOfferCountBySkill :one
-SELECT COUNT(*)
+func (q *Queries) GetOfferCountByCategory(ctx context.Context) ([]*GetOfferCountByCategoryRow, error) {
+	rows, err := q.db.Query(ctx, getOfferCountByCategory)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []*GetOfferCountByCategoryRow
+	for rows.Next() {
+		var i GetOfferCountByCategoryRow
+		if err := rows.Scan(&i.Category, &i.Count); err != nil {
+			return nil, err
+		}
+		items = append(items, &i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getOfferCountBySkill = `-- name: GetOfferCountBySkill :many
+SELECT skill, COUNT(*)
 FROM offers
 GROUP BY skill
 `
 
-func (q *Queries) GetOfferCountBySkill(ctx context.Context) (int64, error) {
-	row := q.db.QueryRow(ctx, getOfferCountBySkill)
-	var count int64
-	err := row.Scan(&count)
-	return count, err
+type GetOfferCountBySkillRow struct {
+	Skill string
+	Count int64
+}
+
+func (q *Queries) GetOfferCountBySkill(ctx context.Context) ([]*GetOfferCountBySkillRow, error) {
+	rows, err := q.db.Query(ctx, getOfferCountBySkill)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []*GetOfferCountBySkillRow
+	for rows.Next() {
+		var i GetOfferCountBySkillRow
+		if err := rows.Scan(&i.Skill, &i.Count); err != nil {
+			return nil, err
+		}
+		items = append(items, &i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getOfferCountByUser = `-- name: GetOfferCountByUser :one
 SELECT
-    COUNT(*)
+    user_id, COUNT(*)
 FROM offers
 WHERE
     user_id = $1
 `
 
-func (q *Queries) GetOfferCountByUser(ctx context.Context, userID int32) (int64, error) {
+type GetOfferCountByUserRow struct {
+	UserID int32
+	Count  int64
+}
+
+func (q *Queries) GetOfferCountByUser(ctx context.Context, userID int32) (*GetOfferCountByUserRow, error) {
 	row := q.db.QueryRow(ctx, getOfferCountByUser, userID)
-	var count int64
-	err := row.Scan(&count)
-	return count, err
+	var i GetOfferCountByUserRow
+	err := row.Scan(&i.UserID, &i.Count)
+	return &i, err
 }
 
 const getReportCountByUser = `-- name: GetReportCountByUser :one
 SELECT
-    COUNT(*)
+    reported_user_id, COUNT(*)
 FROM reports
 WHERE
     reported_user_id = $1
 `
 
-func (q *Queries) GetReportCountByUser(ctx context.Context, reportedUserID pgtype.Int4) (int64, error) {
-	row := q.db.QueryRow(ctx, getReportCountByUser, reportedUserID)
-	var count int64
-	err := row.Scan(&count)
-	return count, err
+type GetReportCountByUserRow struct {
+	ReportedUserID pgtype.Int4
+	Count          int64
 }
 
-const getReviewCountByStars = `-- name: GetReviewCountByStars :one
-SELECT COUNT(*)
+func (q *Queries) GetReportCountByUser(ctx context.Context, reportedUserID pgtype.Int4) (*GetReportCountByUserRow, error) {
+	row := q.db.QueryRow(ctx, getReportCountByUser, reportedUserID)
+	var i GetReportCountByUserRow
+	err := row.Scan(&i.ReportedUserID, &i.Count)
+	return &i, err
+}
+
+const getReviewCountByStars = `-- name: GetReviewCountByStars :many
+SELECT star_count, COUNT(*)
 FROM reviews
 GROUP BY star_count
 `
 
-func (q *Queries) GetReviewCountByStars(ctx context.Context) (int64, error) {
-	row := q.db.QueryRow(ctx, getReviewCountByStars)
-	var count int64
-	err := row.Scan(&count)
-	return count, err
+type GetReviewCountByStarsRow struct {
+	StarCount int32
+	Count     int64
+}
+
+func (q *Queries) GetReviewCountByStars(ctx context.Context) ([]*GetReviewCountByStarsRow, error) {
+	rows, err := q.db.Query(ctx, getReviewCountByStars)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []*GetReviewCountByStarsRow
+	for rows.Next() {
+		var i GetReviewCountByStarsRow
+		if err := rows.Scan(&i.StarCount, &i.Count); err != nil {
+			return nil, err
+		}
+		items = append(items, &i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const getReviewCountByUser = `-- name: GetReviewCountByUser :one
 SELECT
-    COUNT(*)
+    reviewing_user_id, COUNT(*)
 FROM reviews
 WHERE reviewing_user_id = $1
 `
 
-func (q *Queries) GetReviewCountByUser(ctx context.Context, reviewingUserID int32) (int64, error) {
+type GetReviewCountByUserRow struct {
+	ReviewingUserID int32
+	Count           int64
+}
+
+func (q *Queries) GetReviewCountByUser(ctx context.Context, reviewingUserID int32) (*GetReviewCountByUserRow, error) {
 	row := q.db.QueryRow(ctx, getReviewCountByUser, reviewingUserID)
-	var count int64
-	err := row.Scan(&count)
-	return count, err
+	var i GetReviewCountByUserRow
+	err := row.Scan(&i.ReviewingUserID, &i.Count)
+	return &i, err
 }
 
 const getUserCount = `-- name: GetUserCount :one

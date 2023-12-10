@@ -1,33 +1,33 @@
 -- name: GetOfferCountByUser :one
 SELECT
-    COUNT(*)
+    user_id, COUNT(*)
 FROM offers
 WHERE
     user_id = $1;
 
 -- name: GetReportCountByUser :one
 SELECT
-    COUNT(*)
+    reported_user_id, COUNT(*)
 FROM reports
 WHERE
     reported_user_id = $1;
 
 -- name: GetReviewCountByUser :one
 SELECT
-    COUNT(*)
+    reviewing_user_id, COUNT(*)
 FROM reviews
 WHERE reviewing_user_id = $1;
 
 
--- name: GetReviewCountByStars :one
-SELECT COUNT(*)
+-- name: GetReviewCountByStars :many
+SELECT star_count, COUNT(*)
 FROM reviews
 GROUP BY star_count;
 
 
 -- name: GetAverageStarsByUser :one
 SELECT
-    AVG(star_count)
+    reviewed_user_id, AVG(star_count)
 FROM reviews
 WHERE
     reviewed_user_id = $1;
@@ -37,15 +37,15 @@ SELECT
     COUNT(*)
 FROM users;
 
--- name: GetOfferCountByCategory :one
-SELECT COUNT(skill_categories.category)
+-- name: GetOfferCountByCategory :many
+SELECT skill_categories.category, COUNT(skill_categories.category)
 FROM offers
 INNER JOIN skills ON offers.skill = skills.skill
 INNER JOIN skill_categories ON skills.skill = skill_categories.skill
 GROUP BY skill_categories.category;
 
--- name: GetOfferCountBySkill :one
-SELECT COUNT(*)
+-- name: GetOfferCountBySkill :many
+SELECT skill, COUNT(*)
 FROM offers
 GROUP BY skill;
 
