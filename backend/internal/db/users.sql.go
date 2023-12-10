@@ -39,15 +39,15 @@ VALUES
 `
 
 type AddUserParams struct {
-	Username        string
-	DiscordUsername pgtype.Text
-	PasswordHash    string
+	Username        string      `json:"username"`
+	DiscordUsername pgtype.Text `json:"discordUsername"`
+	PasswordHash    string      `json:"passwordHash"`
 }
 
 type AddUserRow struct {
-	UserID          int32
-	Username        string
-	DiscordUsername pgtype.Text
+	UserID          int32       `json:"userId"`
+	Username        string      `json:"username"`
+	DiscordUsername pgtype.Text `json:"discordUsername"`
 }
 
 // //////////////// USERS ////////////////

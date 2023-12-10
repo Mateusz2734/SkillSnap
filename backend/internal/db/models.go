@@ -31,8 +31,8 @@ func (e *UserRole) Scan(src interface{}) error {
 }
 
 type NullUserRole struct {
-	UserRole UserRole
-	Valid    bool // Valid is true if UserRole is not NULL
+	UserRole UserRole `json:"userRole"`
+	Valid    bool     `json:"valid"` // Valid is true if UserRole is not NULL
 }
 
 // Scan implements the Scanner interface.
@@ -54,55 +54,55 @@ func (ns NullUserRole) Value() (driver.Value, error) {
 }
 
 type Category struct {
-	Category string
+	Category string `json:"category"`
 }
 
 type Offer struct {
-	CreatedAt   pgtype.Timestamp
-	OfferID     int32
-	UserID      int32
-	Skill       string
-	Description string
+	CreatedAt   pgtype.Timestamp `json:"createdAt"`
+	OfferID     int32            `json:"offerId"`
+	UserID      int32            `json:"userId"`
+	Skill       string           `json:"skill"`
+	Description string           `json:"description"`
 }
 
 type Report struct {
-	CreatedAt       pgtype.Timestamp
-	ReportID        int32
-	ReportingUserID int32
-	ReportedUserID  pgtype.Int4
-	ReportedOfferID pgtype.Int4
-	Reason          string
-	Description     string
-	Status          string
+	CreatedAt       pgtype.Timestamp `json:"createdAt"`
+	ReportID        int32            `json:"reportId"`
+	ReportingUserID int32            `json:"reportingUserId"`
+	ReportedUserID  pgtype.Int4      `json:"reportedUserId"`
+	ReportedOfferID pgtype.Int4      `json:"reportedOfferId"`
+	Reason          string           `json:"reason"`
+	Description     string           `json:"description"`
+	Status          string           `json:"status"`
 }
 
 type ReportReason struct {
-	Reason string
+	Reason string `json:"reason"`
 }
 
 type Review struct {
-	CreatedAt       pgtype.Timestamp
-	ReviewID        int32
-	ReviewingUserID int32
-	ReviewedUserID  int32
-	StarCount       int32
-	Review          string
+	CreatedAt       pgtype.Timestamp `json:"createdAt"`
+	ReviewID        int32            `json:"reviewId"`
+	ReviewingUserID int32            `json:"reviewingUserId"`
+	ReviewedUserID  int32            `json:"reviewedUserId"`
+	StarCount       int32            `json:"starCount"`
+	Review          string           `json:"review"`
 }
 
 type Skill struct {
-	Skill string
+	Skill string `json:"skill"`
 }
 
 type SkillCategory struct {
-	Skill    string
-	Category string
+	Skill    string `json:"skill"`
+	Category string `json:"category"`
 }
 
 type User struct {
-	CreatedAt       pgtype.Timestamp
-	UserID          int32
-	Username        string
-	DiscordUsername pgtype.Text
-	PasswordHash    string
-	Role            UserRole
+	CreatedAt       pgtype.Timestamp `json:"createdAt"`
+	UserID          int32            `json:"userId"`
+	Username        string           `json:"username"`
+	DiscordUsername pgtype.Text      `json:"discordUsername"`
+	PasswordHash    string           `json:"passwordHash"`
+	Role            UserRole         `json:"role"`
 }

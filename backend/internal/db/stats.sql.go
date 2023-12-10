@@ -20,8 +20,8 @@ WHERE
 `
 
 type GetAverageStarsByUserRow struct {
-	ReviewedUserID int32
-	Avg            float64
+	ReviewedUserID int32   `json:"reviewedUserId"`
+	Avg            float64 `json:"avg"`
 }
 
 func (q *Queries) GetAverageStarsByUser(ctx context.Context, reviewedUserID int32) (*GetAverageStarsByUserRow, error) {
@@ -53,8 +53,8 @@ GROUP BY skill_categories.category
 `
 
 type GetOfferCountByCategoryRow struct {
-	Category string
-	Count    int64
+	Category string `json:"category"`
+	Count    int64  `json:"count"`
 }
 
 func (q *Queries) GetOfferCountByCategory(ctx context.Context) ([]*GetOfferCountByCategoryRow, error) {
@@ -84,8 +84,8 @@ GROUP BY skill
 `
 
 type GetOfferCountBySkillRow struct {
-	Skill string
-	Count int64
+	Skill string `json:"skill"`
+	Count int64  `json:"count"`
 }
 
 func (q *Queries) GetOfferCountBySkill(ctx context.Context) ([]*GetOfferCountBySkillRow, error) {
@@ -117,8 +117,8 @@ WHERE
 `
 
 type GetOfferCountByUserRow struct {
-	UserID int32
-	Count  int64
+	UserID int32 `json:"userId"`
+	Count  int64 `json:"count"`
 }
 
 func (q *Queries) GetOfferCountByUser(ctx context.Context, userID int32) (*GetOfferCountByUserRow, error) {
@@ -137,8 +137,8 @@ WHERE
 `
 
 type GetReportCountByUserRow struct {
-	ReportedUserID pgtype.Int4
-	Count          int64
+	ReportedUserID pgtype.Int4 `json:"reportedUserId"`
+	Count          int64       `json:"count"`
 }
 
 func (q *Queries) GetReportCountByUser(ctx context.Context, reportedUserID pgtype.Int4) (*GetReportCountByUserRow, error) {
@@ -155,8 +155,8 @@ GROUP BY star_count
 `
 
 type GetReviewCountByStarsRow struct {
-	StarCount int32
-	Count     int64
+	StarCount int32 `json:"starCount"`
+	Count     int64 `json:"count"`
 }
 
 func (q *Queries) GetReviewCountByStars(ctx context.Context) ([]*GetReviewCountByStarsRow, error) {
@@ -187,8 +187,8 @@ WHERE reviewing_user_id = $1
 `
 
 type GetReviewCountByUserRow struct {
-	ReviewingUserID int32
-	Count           int64
+	ReviewingUserID int32 `json:"reviewingUserId"`
+	Count           int64 `json:"count"`
 }
 
 func (q *Queries) GetReviewCountByUser(ctx context.Context, reviewingUserID int32) (*GetReviewCountByUserRow, error) {

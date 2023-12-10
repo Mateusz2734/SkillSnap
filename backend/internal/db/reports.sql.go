@@ -30,12 +30,12 @@ VALUES
 `
 
 type AddReportParams struct {
-	ReportingUserID int32
-	ReportedUserID  pgtype.Int4
-	ReportedOfferID pgtype.Int4
-	Reason          string
-	Description     string
-	Status          string
+	ReportingUserID int32       `json:"reportingUserId"`
+	ReportedUserID  pgtype.Int4 `json:"reportedUserId"`
+	ReportedOfferID pgtype.Int4 `json:"reportedOfferId"`
+	Reason          string      `json:"reason"`
+	Description     string      `json:"description"`
+	Status          string      `json:"status"`
 }
 
 // //////////////// REPORTS ////////////////

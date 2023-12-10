@@ -16,10 +16,10 @@ VALUES
 `
 
 type AddReviewParams struct {
-	ReviewingUserID int32
-	ReviewedUserID  int32
-	StarCount       int32
-	Review          string
+	ReviewingUserID int32  `json:"reviewingUserId"`
+	ReviewedUserID  int32  `json:"reviewedUserId"`
+	StarCount       int32  `json:"starCount"`
+	Review          string `json:"review"`
 }
 
 func (q *Queries) AddReview(ctx context.Context, arg AddReviewParams) (*Review, error) {

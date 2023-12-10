@@ -16,9 +16,9 @@ VALUES
 `
 
 type AddOfferParams struct {
-	UserID      int32
-	Skill       string
-	Description string
+	UserID      int32  `json:"userId"`
+	Skill       string `json:"skill"`
+	Description string `json:"description"`
 }
 
 func (q *Queries) AddOffer(ctx context.Context, arg AddOfferParams) (*Offer, error) {
@@ -76,8 +76,8 @@ OFFSET $2
 `
 
 type GetOffersParams struct {
-	Limit  int32
-	Offset int32
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
 }
 
 func (q *Queries) GetOffers(ctx context.Context, arg GetOffersParams) ([]*Offer, error) {
@@ -122,9 +122,9 @@ OFFSET $3
 `
 
 type GetOffersByCategoryParams struct {
-	Category string
-	Limit    int32
-	Offset   int32
+	Category string `json:"category"`
+	Limit    int32  `json:"limit"`
+	Offset   int32  `json:"offset"`
 }
 
 func (q *Queries) GetOffersByCategory(ctx context.Context, arg GetOffersByCategoryParams) ([]*Offer, error) {

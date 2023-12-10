@@ -17,3 +17,5 @@ sql:
         sql_package: "pgx/v5"
         output_db_file_name: "queries.go"
         emit_result_struct_pointers: true
+        emit_json_tags: true
+        json_tags_case_style: "camel"
