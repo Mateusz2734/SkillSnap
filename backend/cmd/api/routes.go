@@ -32,5 +32,11 @@ func (app *application) routes() http.Handler {
 		mux.HandleFunc("/basic-auth-protected", app.protected, "GET")
 	})
 
+	mux.Group(func(mux *flow.Mux) {
+		mux.Use(app.requireAdminPrivileges)
+
+		mux.HandleFunc("/admin-protected", app.protected, "GET")
+	})
+
 	return mux
 }

@@ -117,6 +117,24 @@ func (app *application) requireAuthenticatedUser(next http.Handler) http.Handler
 	})
 }
 
+func (app *application) requireAdminPrivileges(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		authenticatedUser := contextGetAuthenticatedUser(r)
+
+		if authenticatedUser == nil {
+			app.authenticationRequired(w, r)
+			return
+		}
+
+		if authenticatedUser.Role != "admin" {
+			app.adminPrivilegesRequired(w, r)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func (app *application) requireBasicAuthentication(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		username, plaintextPassword, ok := r.BasicAuth()
