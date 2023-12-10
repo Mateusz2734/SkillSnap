@@ -153,3 +153,53 @@ func (app *application) createAuthenticationToken(w http.ResponseWriter, r *http
 func (app *application) protected(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("This is a protected handler"))
 }
+
+func (app *application) getStats(w http.ResponseWriter, r *http.Request) {
+	reviewCountByStars, err := app.db.GetReviewCountByStars(r.Context())
+
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	userCount, err := app.db.GetUserCount(r.Context())
+
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	offerCountByCategory, err := app.db.GetOfferCountByCategory(r.Context())
+
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	offerCountBySkill, err := app.db.GetOfferCountBySkill(r.Context())
+
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	offerCount, err := app.db.GetOfferCount(r.Context())
+
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	data := map[string]interface{}{
+		"userCount":            userCount,
+		"offerCount":           offerCount,
+		"reviewCountByStars":   reviewCountByStars,
+		"offerCountBySkill":    offerCountBySkill,
+		"offerCountByCategory": offerCountByCategory,
+	}
+
+	err = response.JSON(w, http.StatusOK, data)
+	if err != nil {
+		app.serverError(w, r, err)
+	}
+}
