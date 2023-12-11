@@ -13,3 +13,10 @@ WHERE
 SELECT
     *
 FROM categories;
+
+-- name: GetCategoriesBySkill :many
+SELECT
+    category
+FROM skill_categories
+WHERE
+    skill = $1;
