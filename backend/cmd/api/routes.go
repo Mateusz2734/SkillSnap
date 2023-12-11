@@ -29,7 +29,8 @@ func (app *application) routes() http.Handler {
 	mux.Group(func(mux *flow.Mux) {
 		mux.Use(app.requireAdminPrivileges)
 
-		mux.HandleFunc("/admin/stats", app.getStats, "GET")
+		mux.HandleFunc("/admin/stats/general", app.getGeneralStats, "GET")
+		mux.HandleFunc("/admin/stats/users/:userID", app.getUserStats, "GET")
 		mux.HandleFunc("/admin-protected", app.protected, "GET")
 	})
 

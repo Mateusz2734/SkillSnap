@@ -13,39 +13,34 @@ import (
 
 const getAverageStarsByUser = `-- name: GetAverageStarsByUser :one
 SELECT
-    reviewed_user_id, AVG(star_count)
+    COALESCE(AVG(star_count), 0) AS average
 FROM reviews
 WHERE
     reviewed_user_id = $1
 `
 
-type GetAverageStarsByUserRow struct {
-	ReviewedUserID int32   `json:"reviewedUserId"`
-	Avg            float64 `json:"avg"`
-}
-
-func (q *Queries) GetAverageStarsByUser(ctx context.Context, reviewedUserID int32) (*GetAverageStarsByUserRow, error) {
+func (q *Queries) GetAverageStarsByUser(ctx context.Context, reviewedUserID int32) (interface{}, error) {
 	row := q.db.QueryRow(ctx, getAverageStarsByUser, reviewedUserID)
-	var i GetAverageStarsByUserRow
-	err := row.Scan(&i.ReviewedUserID, &i.Avg)
-	return &i, err
+	var average interface{}
+	err := row.Scan(&average)
+	return average, err
 }
 
 const getOfferCount = `-- name: GetOfferCount :one
 SELECT
-    COUNT(*)
+    COALESCE(COUNT(*), 0) AS count
 FROM offers
 `
 
-func (q *Queries) GetOfferCount(ctx context.Context) (int64, error) {
+func (q *Queries) GetOfferCount(ctx context.Context) (interface{}, error) {
 	row := q.db.QueryRow(ctx, getOfferCount)
-	var count int64
+	var count interface{}
 	err := row.Scan(&count)
 	return count, err
 }
 
 const getOfferCountByCategory = `-- name: GetOfferCountByCategory :many
-SELECT skill_categories.category, COUNT(skill_categories.category)
+SELECT skill_categories.category, COALESCE(COUNT(skill_categories.category), 0) AS count
 FROM offers
 INNER JOIN skills ON offers.skill = skills.skill
 INNER JOIN skill_categories ON skills.skill = skill_categories.skill
@@ -53,8 +48,8 @@ GROUP BY skill_categories.category
 `
 
 type GetOfferCountByCategoryRow struct {
-	Category string `json:"category"`
-	Count    int64  `json:"count"`
+	Category string      `json:"category"`
+	Count    interface{} `json:"count"`
 }
 
 func (q *Queries) GetOfferCountByCategory(ctx context.Context) ([]*GetOfferCountByCategoryRow, error) {
@@ -78,14 +73,14 @@ func (q *Queries) GetOfferCountByCategory(ctx context.Context) ([]*GetOfferCount
 }
 
 const getOfferCountBySkill = `-- name: GetOfferCountBySkill :many
-SELECT skill, COUNT(*)
+SELECT skill, COALESCE(COUNT(*), 0) AS count
 FROM offers
 GROUP BY skill
 `
 
 type GetOfferCountBySkillRow struct {
-	Skill string `json:"skill"`
-	Count int64  `json:"count"`
+	Skill string      `json:"skill"`
+	Count interface{} `json:"count"`
 }
 
 func (q *Queries) GetOfferCountBySkill(ctx context.Context) ([]*GetOfferCountBySkillRow, error) {
@@ -110,53 +105,43 @@ func (q *Queries) GetOfferCountBySkill(ctx context.Context) ([]*GetOfferCountByS
 
 const getOfferCountByUser = `-- name: GetOfferCountByUser :one
 SELECT
-    user_id, COUNT(*)
+    COALESCE(COUNT(*), 0) AS count
 FROM offers
 WHERE
     user_id = $1
 `
 
-type GetOfferCountByUserRow struct {
-	UserID int32 `json:"userId"`
-	Count  int64 `json:"count"`
-}
-
-func (q *Queries) GetOfferCountByUser(ctx context.Context, userID int32) (*GetOfferCountByUserRow, error) {
+func (q *Queries) GetOfferCountByUser(ctx context.Context, userID int32) (interface{}, error) {
 	row := q.db.QueryRow(ctx, getOfferCountByUser, userID)
-	var i GetOfferCountByUserRow
-	err := row.Scan(&i.UserID, &i.Count)
-	return &i, err
+	var count interface{}
+	err := row.Scan(&count)
+	return count, err
 }
 
 const getReportCountByUser = `-- name: GetReportCountByUser :one
 SELECT
-    reported_user_id, COUNT(*)
+    COALESCE(COUNT(*), 0) AS count
 FROM reports
 WHERE
     reported_user_id = $1
 `
 
-type GetReportCountByUserRow struct {
-	ReportedUserID pgtype.Int4 `json:"reportedUserId"`
-	Count          int64       `json:"count"`
-}
-
-func (q *Queries) GetReportCountByUser(ctx context.Context, reportedUserID pgtype.Int4) (*GetReportCountByUserRow, error) {
+func (q *Queries) GetReportCountByUser(ctx context.Context, reportedUserID pgtype.Int4) (interface{}, error) {
 	row := q.db.QueryRow(ctx, getReportCountByUser, reportedUserID)
-	var i GetReportCountByUserRow
-	err := row.Scan(&i.ReportedUserID, &i.Count)
-	return &i, err
+	var count interface{}
+	err := row.Scan(&count)
+	return count, err
 }
 
 const getReviewCountByStars = `-- name: GetReviewCountByStars :many
-SELECT star_count, COUNT(*)
+SELECT star_count, COALESCE(COUNT(*), 0) AS count
 FROM reviews
 GROUP BY star_count
 `
 
 type GetReviewCountByStarsRow struct {
-	StarCount int32 `json:"starCount"`
-	Count     int64 `json:"count"`
+	StarCount int32       `json:"starCount"`
+	Count     interface{} `json:"count"`
 }
 
 func (q *Queries) GetReviewCountByStars(ctx context.Context) ([]*GetReviewCountByStarsRow, error) {
@@ -181,32 +166,27 @@ func (q *Queries) GetReviewCountByStars(ctx context.Context) ([]*GetReviewCountB
 
 const getReviewCountByUser = `-- name: GetReviewCountByUser :one
 SELECT
-    reviewing_user_id, COUNT(*)
+    COALESCE(COUNT(*), 0) AS count
 FROM reviews
 WHERE reviewing_user_id = $1
 `
 
-type GetReviewCountByUserRow struct {
-	ReviewingUserID int32 `json:"reviewingUserId"`
-	Count           int64 `json:"count"`
-}
-
-func (q *Queries) GetReviewCountByUser(ctx context.Context, reviewingUserID int32) (*GetReviewCountByUserRow, error) {
+func (q *Queries) GetReviewCountByUser(ctx context.Context, reviewingUserID int32) (interface{}, error) {
 	row := q.db.QueryRow(ctx, getReviewCountByUser, reviewingUserID)
-	var i GetReviewCountByUserRow
-	err := row.Scan(&i.ReviewingUserID, &i.Count)
-	return &i, err
+	var count interface{}
+	err := row.Scan(&count)
+	return count, err
 }
 
 const getUserCount = `-- name: GetUserCount :one
 SELECT
-    COUNT(*)
+    COALESCE(COUNT(*), 0) AS count
 FROM users
 `
 
-func (q *Queries) GetUserCount(ctx context.Context) (int64, error) {
+func (q *Queries) GetUserCount(ctx context.Context) (interface{}, error) {
 	row := q.db.QueryRow(ctx, getUserCount)
-	var count int64
+	var count interface{}
 	err := row.Scan(&count)
 	return count, err
 }
