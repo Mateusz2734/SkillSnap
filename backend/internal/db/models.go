@@ -103,6 +103,6 @@ type User struct {
 	UserID          int32            `json:"userId"`
 	Username        string           `json:"username"`
 	DiscordUsername pgtype.Text      `json:"discordUsername"`
-	PasswordHash    string           `json:"passwordHash"`
+	PasswordHash    string           `json:"-"`
 	Role            UserRole         `json:"role"`
 }

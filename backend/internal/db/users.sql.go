@@ -41,7 +41,7 @@ VALUES
 type AddUserParams struct {
 	Username        string      `json:"username"`
 	DiscordUsername pgtype.Text `json:"discordUsername"`
-	PasswordHash    string      `json:"passwordHash"`
+	PasswordHash    string      `json:"-"`
 }
 
 type AddUserRow struct {
