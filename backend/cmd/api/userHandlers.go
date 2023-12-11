@@ -1,13 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/Mateusz2734/wdai-project/backend/internal/db"
 	"github.com/Mateusz2734/wdai-project/backend/internal/password"
 	"github.com/Mateusz2734/wdai-project/backend/internal/request"
 	"github.com/Mateusz2734/wdai-project/backend/internal/response"
 	"github.com/Mateusz2734/wdai-project/backend/internal/validator"
+	"github.com/alexedwards/flow"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgtype"
 )
@@ -80,6 +83,56 @@ func (app *application) createUser(w http.ResponseWriter, r *http.Request) {
 	data := map[string]interface{}{
 		"status": "success",
 		"userID": user.UserID,
+	}
+
+	err = response.JSON(w, http.StatusOK, data)
+
+	if err != nil {
+		app.serverError(w, r, err)
+	}
+}
+
+func (app *application) getUsers(w http.ResponseWriter, r *http.Request) {
+	users, err := app.db.GetUsers(r.Context())
+
+	if err != nil && err != pgx.ErrNoRows {
+		app.serverError(w, r, err)
+		return
+	}
+
+	err = response.JSON(w, http.StatusOK, users)
+
+	if err != nil {
+		app.serverError(w, r, err)
+	}
+}
+
+func (app *application) deleteUser(w http.ResponseWriter, r *http.Request) {
+	userID, err := strconv.ParseInt(flow.Param(r.Context(), "userID"), 10, 32)
+
+	if err != nil {
+		app.badRequest(w, r, err)
+		return
+	}
+
+	authenticatedUser := contextGetAuthenticatedUser(r)
+
+	fmt.Printf("%+v\n", authenticatedUser)
+
+	if !(authenticatedUser.UserID == int32(userID) || authenticatedUser.Role == "admin") {
+		app.notPermitted(w, r)
+		return
+	}
+
+	err = app.db.DeleteUser(r.Context(), int32(userID))
+
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	data := map[string]interface{}{
+		"status": "success",
 	}
 
 	err = response.JSON(w, http.StatusOK, data)
