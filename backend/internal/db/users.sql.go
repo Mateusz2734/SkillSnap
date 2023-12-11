@@ -136,6 +136,27 @@ func (q *Queries) GetAdmins(ctx context.Context) ([]*User, error) {
 	return items, nil
 }
 
+const getUserByDiscordUsername = `-- name: GetUserByDiscordUsername :one
+SELECT 
+    created_at, user_id, username, discord_username, password_hash, role
+FROM users
+WHERE discord_username = $1
+`
+
+func (q *Queries) GetUserByDiscordUsername(ctx context.Context, discordUsername pgtype.Text) (*User, error) {
+	row := q.db.QueryRow(ctx, getUserByDiscordUsername, discordUsername)
+	var i User
+	err := row.Scan(
+		&i.CreatedAt,
+		&i.UserID,
+		&i.Username,
+		&i.DiscordUsername,
+		&i.PasswordHash,
+		&i.Role,
+	)
+	return &i, err
+}
+
 const getUserById = `-- name: GetUserById :one
 SELECT 
     created_at, user_id, username, discord_username, password_hash, role

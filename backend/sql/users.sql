@@ -27,6 +27,12 @@ SELECT
 FROM users
 WHERE username = $1;
 
+-- name: GetUserByDiscordUsername :one
+SELECT 
+    *
+FROM users
+WHERE discord_username = $1;
+
 -- //////////////// ADMINS ////////////////
 -- name: AddAdmin :one
 UPDATE users 
