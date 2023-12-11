@@ -81,3 +81,7 @@ func (app *application) authenticationRequired(w http.ResponseWriter, r *http.Re
 func (app *application) adminPrivilegesRequired(w http.ResponseWriter, r *http.Request) {
 	app.errorMessage(w, r, http.StatusUnauthorized, "You must be an admin to access this resource", nil)
 }
+
+func (app *application) notPermitted(w http.ResponseWriter, r *http.Request) {
+	app.errorMessage(w, r, http.StatusForbidden, "You do not have permission to access this resource", nil)
+}
