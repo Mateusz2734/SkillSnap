@@ -55,6 +55,12 @@ func (app *application) badRequest(w http.ResponseWriter, r *http.Request, err e
 }
 
 func (app *application) failedValidation(w http.ResponseWriter, r *http.Request, v validator.Validator) {
+	if v.HasErrors() {
+		v.Status = "failed"
+	} else {
+		v.Status = "success"
+	}
+
 	err := response.JSON(w, http.StatusUnprocessableEntity, v)
 	if err != nil {
 		app.serverError(w, r, err)
@@ -74,12 +80,4 @@ func (app *application) authenticationRequired(w http.ResponseWriter, r *http.Re
 
 func (app *application) adminPrivilegesRequired(w http.ResponseWriter, r *http.Request) {
 	app.errorMessage(w, r, http.StatusUnauthorized, "You must be an admin to access this resource", nil)
-}
-
-func (app *application) basicAuthenticationRequired(w http.ResponseWriter, r *http.Request) {
-	headers := make(http.Header)
-	headers.Set("WWW-Authenticate", `Basic realm="restricted", charset="UTF-8"`)
-
-	message := "You must be authenticated to access this resource"
-	app.errorMessage(w, r, http.StatusUnauthorized, message, headers)
 }
