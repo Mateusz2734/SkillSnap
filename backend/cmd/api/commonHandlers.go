@@ -14,11 +14,20 @@ import (
 )
 
 func (app *application) status(w http.ResponseWriter, r *http.Request) {
+	err := app.db.Ping(r.Context())
+
 	data := map[string]string{
-		"Status": "OK",
+		"status": "Ok",
+	}
+	status := http.StatusOK
+
+	if err != nil {
+		data["status"] = "Unavailable"
+		status = http.StatusServiceUnavailable
 	}
 
-	err := response.JSON(w, http.StatusOK, data)
+	err = response.JSON(w, status, data)
+
 	if err != nil {
 		app.serverError(w, r, err)
 	}
