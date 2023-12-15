@@ -5,6 +5,12 @@ import (
 	"net/http"
 )
 
+func JSONSuccess(w http.ResponseWriter, data map[string]interface{}) error {
+	data["status"] = "success"
+
+	return JSON(w, http.StatusOK, data)
+}
+
 func JSON(w http.ResponseWriter, status int, data any) error {
 	return JSONWithHeaders(w, status, data, nil)
 }
