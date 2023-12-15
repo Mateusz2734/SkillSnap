@@ -9,6 +9,7 @@ import (
 	"github.com/Mateusz2734/wdai-project/backend/internal/request"
 	"github.com/Mateusz2734/wdai-project/backend/internal/response"
 	"github.com/Mateusz2734/wdai-project/backend/internal/validator"
+	"github.com/jackc/pgx/v5"
 
 	"github.com/pascaldekloe/jwt"
 )
@@ -47,13 +48,17 @@ func (app *application) createAuthenticationToken(w http.ResponseWriter, r *http
 	}
 
 	user, err := app.db.GetUserByUsername(r.Context(), input.Username)
-	if err != nil {
+	if err != nil && err != pgx.ErrNoRows {
 		app.serverError(w, r, err)
 		return
 	}
 
-	input.Validator.CheckField(input.Username != "", "Username", "Username is required")
-	input.Validator.CheckField(user != nil, "Username", "Username could not be found")
+	if err == pgx.ErrNoRows {
+		app.errorMessage(w, r, http.StatusUnauthorized, "Username could not be found", nil)
+		return
+	}
+
+	input.Validator.CheckField(input.Username != "", "username", "Username is required")
 
 	if user != nil {
 		passwordMatches, err := password.Matches(input.Password, user.PasswordHash)
@@ -62,8 +67,8 @@ func (app *application) createAuthenticationToken(w http.ResponseWriter, r *http
 			return
 		}
 
-		input.Validator.CheckField(input.Password != "", "Password", "Password is required")
-		input.Validator.CheckField(passwordMatches, "Password", "Password is incorrect")
+		input.Validator.CheckField(input.Password != "", "password", "Password is required")
+		input.Validator.CheckField(passwordMatches, "password", "Password is incorrect")
 	}
 
 	if input.Validator.HasErrors() {
@@ -88,12 +93,12 @@ func (app *application) createAuthenticationToken(w http.ResponseWriter, r *http
 		return
 	}
 
-	data := map[string]string{
-		"AuthenticationToken":       string(jwtBytes),
-		"AuthenticationTokenExpiry": expiry.Format(time.RFC3339),
+	data := map[string]interface{}{
+		"authenticationToken":       string(jwtBytes),
+		"authenticationTokenExpiry": expiry.Format(time.RFC3339),
 	}
 
-	err = response.JSON(w, http.StatusOK, data)
+	err = response.JSONSuccess(w, data)
 	if err != nil {
 		app.serverError(w, r, err)
 	}
