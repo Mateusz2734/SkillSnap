@@ -16,7 +16,7 @@ func (app *application) routes() http.Handler {
 	mux.Use(app.recoverPanic)
 	mux.Use(app.authenticate)
 
-	mux.HandleFunc("/status", app.status, "GET")
+	mux.HandleFunc("/health", app.status, "GET")
 	mux.HandleFunc("/users", app.createUser, "POST")
 	mux.HandleFunc("/auth/login", app.createAuthenticationToken, "POST")
 
@@ -24,7 +24,6 @@ func (app *application) routes() http.Handler {
 		mux.Use(app.requireAuthenticatedUser)
 
 		mux.HandleFunc("/users/:userID", app.deleteUser, "DELETE")
-		mux.HandleFunc("/protected", app.protected, "GET")
 		mux.HandleFunc("/categories", app.getCategories, "GET")
 		mux.HandleFunc("/skills", app.getSkills, "GET")
 		mux.HandleFunc("/categories/:skill", app.getCategoriesBySkill, "GET")
@@ -35,10 +34,10 @@ func (app *application) routes() http.Handler {
 
 		mux.HandleFunc("/skills", app.addSkill, "POST")
 		mux.HandleFunc("/categories", app.addCategory, "POST")
+		mux.HandleFunc("/admin/reports", app.getReports, "GET")
 		mux.HandleFunc("/admin/users", app.getUsers, "GET")
 		mux.HandleFunc("/admin/stats/general", app.getGeneralStats, "GET")
 		mux.HandleFunc("/admin/stats/users/:userID", app.getUserStats, "GET")
-		mux.HandleFunc("/admin-protected", app.protected, "GET")
 	})
 
 	return mux

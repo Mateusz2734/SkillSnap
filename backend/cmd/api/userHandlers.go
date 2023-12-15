@@ -81,11 +81,10 @@ func (app *application) createUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := map[string]interface{}{
-		"status": "success",
 		"userID": user.UserID,
 	}
 
-	err = response.JSON(w, http.StatusOK, data)
+	err = response.JSONSuccess(w, data)
 
 	if err != nil {
 		app.serverError(w, r, err)
@@ -100,7 +99,11 @@ func (app *application) getUsers(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = response.JSON(w, http.StatusOK, users)
+	data := map[string]interface{}{
+		"users": users,
+	}
+
+	err = response.JSONSuccess(w, data)
 
 	if err != nil {
 		app.serverError(w, r, err)
@@ -131,11 +134,7 @@ func (app *application) deleteUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data := map[string]interface{}{
-		"status": "success",
-	}
-
-	err = response.JSON(w, http.StatusOK, data)
+	err = response.JSONSuccess(w, map[string]interface{}{})
 
 	if err != nil {
 		app.serverError(w, r, err)

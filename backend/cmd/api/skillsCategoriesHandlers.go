@@ -19,11 +19,10 @@ func (app *application) getCategories(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := map[string]interface{}{
-		"status":     "success",
 		"categories": categories,
 	}
 
-	err = response.JSON(w, http.StatusOK, data)
+	err = response.JSONSuccess(w, data)
 
 	if err != nil {
 		app.serverError(w, r, err)
@@ -57,11 +56,10 @@ func (app *application) addCategory(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := map[string]interface{}{
-		"status":   "success",
 		"category": category,
 	}
 
-	err = response.JSON(w, http.StatusOK, data)
+	err = response.JSONSuccess(w, data)
 
 	if err != nil {
 		app.serverError(w, r, err)
@@ -77,11 +75,10 @@ func (app *application) getSkills(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := map[string]interface{}{
-		"status": "success",
 		"skills": skills,
 	}
 
-	err = response.JSON(w, http.StatusOK, data)
+	err = response.JSONSuccess(w, data)
 
 	if err != nil {
 		app.serverError(w, r, err)
@@ -116,11 +113,10 @@ func (app *application) addSkill(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := map[string]interface{}{
-		"status": "success",
-		"skill":  skill,
+		"skill": skill,
 	}
 
-	err = response.JSON(w, http.StatusOK, data)
+	err = response.JSONSuccess(w, data)
 
 	if err != nil {
 		app.serverError(w, r, err)
@@ -147,11 +143,10 @@ func (app *application) getCategoriesBySkill(w http.ResponseWriter, r *http.Requ
 	}
 
 	data := map[string]interface{}{
-		"status":     "success",
 		"categories": categories,
 	}
 
-	err = response.JSON(w, http.StatusOK, data)
+	err = response.JSONSuccess(w, data)
 
 	if err != nil {
 		app.serverError(w, r, err)

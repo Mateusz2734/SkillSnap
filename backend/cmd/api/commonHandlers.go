@@ -17,12 +17,12 @@ func (app *application) status(w http.ResponseWriter, r *http.Request) {
 	err := app.db.Ping(r.Context())
 
 	data := map[string]string{
-		"status": "Ok",
+		"status": "success",
 	}
 	status := http.StatusOK
 
 	if err != nil {
-		data["status"] = "Unavailable"
+		data["status"] = "failed"
 		status = http.StatusServiceUnavailable
 	}
 
@@ -31,10 +31,6 @@ func (app *application) status(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		app.serverError(w, r, err)
 	}
-}
-
-func (app *application) protected(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("This is a protected handler"))
 }
 
 func (app *application) createAuthenticationToken(w http.ResponseWriter, r *http.Request) {

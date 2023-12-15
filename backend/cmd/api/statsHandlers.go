@@ -54,7 +54,7 @@ func (app *application) getGeneralStats(w http.ResponseWriter, r *http.Request) 
 		"offerCountByCategory": offerCountByCategory,
 	}
 
-	err = response.JSON(w, http.StatusOK, data)
+	err = response.JSONSuccess(w, data)
 
 	if err != nil {
 		app.serverError(w, r, err)
@@ -123,7 +123,7 @@ func (app *application) getUserStats(w http.ResponseWriter, r *http.Request) {
 		"averageStars": averageStars,
 	}
 
-	err = response.JSON(w, http.StatusOK, data)
+	err = response.JSONSuccess(w, data)
 
 	if err != nil {
 		app.serverError(w, r, err)
