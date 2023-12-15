@@ -25,11 +25,16 @@ func (app *application) routes() http.Handler {
 
 		mux.HandleFunc("/users/:userID", app.deleteUser, "DELETE")
 		mux.HandleFunc("/protected", app.protected, "GET")
+		mux.HandleFunc("/categories", app.getCategories, "GET")
+		mux.HandleFunc("/skills", app.getSkills, "GET")
+		mux.HandleFunc("/categories/:skill", app.getCategoriesBySkill, "GET")
 	})
 
 	mux.Group(func(mux *flow.Mux) {
 		mux.Use(app.requireAdminPrivileges)
 
+		mux.HandleFunc("/skills", app.addSkill, "POST")
+		mux.HandleFunc("/categories", app.addCategory, "POST")
 		mux.HandleFunc("/admin/users", app.getUsers, "GET")
 		mux.HandleFunc("/admin/stats/general", app.getGeneralStats, "GET")
 		mux.HandleFunc("/admin/stats/users/:userID", app.getUserStats, "GET")
