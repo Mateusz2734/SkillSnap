@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/Mateusz2734/wdai-project/backend/internal/password"
@@ -99,6 +100,53 @@ func (app *application) createAuthenticationToken(w http.ResponseWriter, r *http
 	}
 
 	err = response.JSONSuccess(w, data)
+	if err != nil {
+		app.serverError(w, r, err)
+	}
+}
+
+func (app *application) invalidateAuthenticationToken(w http.ResponseWriter, r *http.Request) {
+	authorizationHeader := r.Header.Get("Authorization")
+
+	if authorizationHeader != "" {
+		headerParts := strings.Split(authorizationHeader, " ")
+
+		if len(headerParts) != 2 || headerParts[0] != "Bearer" {
+			app.invalidAuthenticationToken(w, r)
+			return
+		}
+		token := headerParts[1]
+
+		if app.blacklist.CheckToken(token) {
+			app.invalidAuthenticationToken(w, r)
+			return
+		}
+
+		claims, err := jwt.HMACCheck([]byte(token), []byte(app.config.jwt.secretKey))
+		if err != nil {
+			app.invalidAuthenticationToken(w, r)
+			return
+		}
+
+		if !claims.Valid(time.Now()) {
+			app.invalidAuthenticationToken(w, r)
+			return
+		}
+
+		if claims.Issuer != app.config.baseURL {
+			app.invalidAuthenticationToken(w, r)
+			return
+		}
+
+		if !claims.AcceptAudience(app.config.baseURL) {
+			app.invalidAuthenticationToken(w, r)
+			return
+		}
+
+		app.blacklist.AddToken(token)
+	}
+
+	err := response.JSONSuccess(w, nil)
 	if err != nil {
 		app.serverError(w, r, err)
 	}

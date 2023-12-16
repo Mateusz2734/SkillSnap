@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"github.com/Mateusz2734/wdai-project/backend/internal/db"
+	"github.com/Mateusz2734/wdai-project/backend/internal/request"
 	"github.com/Mateusz2734/wdai-project/backend/internal/version"
 
 	"github.com/lmittmann/tint"
@@ -45,10 +46,11 @@ type config struct {
 }
 
 type application struct {
-	config config
-	db     *db.DB
-	logger *slog.Logger
-	wg     sync.WaitGroup
+	config    config
+	db        *db.DB
+	logger    *slog.Logger
+	wg        sync.WaitGroup
+	blacklist request.TokenBlacklist
 }
 
 func run(logger *slog.Logger) error {
@@ -71,16 +73,19 @@ func run(logger *slog.Logger) error {
 		return nil
 	}
 
-	db, err := db.NewDB(cfg.db.dsn) //(cfg.db.dsn, cfg.db.automigrate)
+	db, err := db.NewDB(cfg.db.dsn)
 	if err != nil {
 		return err
 	}
 	defer db.Close(context.Background())
 
+	blacklist := request.NewTokenBlacklist()
+
 	app := &application{
-		config: cfg,
-		db:     db,
-		logger: logger,
+		config:    cfg,
+		db:        db,
+		logger:    logger,
+		blacklist: *blacklist,
 	}
 
 	return app.serveHTTP()

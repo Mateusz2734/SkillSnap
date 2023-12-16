@@ -23,6 +23,7 @@ func (app *application) routes() http.Handler {
 	mux.Group(func(mux *flow.Mux) {
 		mux.Use(app.requireAuthenticatedUser)
 
+		mux.HandleFunc("/auth/logout", app.invalidateAuthenticationToken, "GET")
 		mux.HandleFunc("/reports", app.addReport, "GET")
 		mux.HandleFunc("/offers", app.getOffers, "GET")
 		mux.HandleFunc("/offers", app.addOffer, "POST")
