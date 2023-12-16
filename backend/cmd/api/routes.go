@@ -26,6 +26,7 @@ func (app *application) routes() http.Handler {
 		mux.HandleFunc("/offers", app.getOffers, "GET")
 		mux.HandleFunc("/offers", app.addOffer, "POST")
 		mux.HandleFunc("/offers/:offerID", app.deleteOffer, "DELETE")
+		mux.HandleFunc("/offers/:offerID", app.getOffer, "GET")
 		mux.HandleFunc("/users/:userID", app.deleteUser, "DELETE")
 		mux.HandleFunc("/categories", app.getCategories, "GET")
 		mux.HandleFunc("/skills", app.getSkills, "GET")

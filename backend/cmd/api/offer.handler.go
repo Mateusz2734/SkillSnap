@@ -8,6 +8,7 @@ import (
 	"github.com/Mateusz2734/wdai-project/backend/internal/request"
 	"github.com/Mateusz2734/wdai-project/backend/internal/response"
 	"github.com/Mateusz2734/wdai-project/backend/internal/validator"
+	"github.com/alexedwards/flow"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -124,7 +125,7 @@ func (app *application) addOffer(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) deleteOffer(w http.ResponseWriter, r *http.Request) {
-	offerID, err := strconv.ParseInt(r.URL.Query().Get("offerID"), 10, 32)
+	offerID, err := strconv.ParseInt(flow.Param(r.Context(), "offerID"), 10, 32)
 	if err != nil {
 		app.badRequest(w, r, err)
 		return
@@ -156,6 +157,32 @@ func (app *application) deleteOffer(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = response.JSONSuccess(w, nil)
+	if err != nil {
+		app.serverError(w, r, err)
+	}
+}
+
+func (app *application) getOffer(w http.ResponseWriter, r *http.Request) {
+	offerID, err := strconv.ParseInt(flow.Param(r.Context(), "offerID"), 10, 32)
+
+	if err != nil {
+		app.badRequest(w, r, err)
+		return
+	}
+
+	offer, err := app.db.GetOfferById(r.Context(), int32(offerID))
+
+	if err != nil && err != pgx.ErrNoRows {
+		app.serverError(w, r, err)
+		return
+	}
+
+	data := map[string]interface{}{
+		"offer": offer,
+	}
+
+	err = response.JSONSuccess(w, data)
+
 	if err != nil {
 		app.serverError(w, r, err)
 	}
