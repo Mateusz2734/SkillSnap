@@ -86,6 +86,20 @@ func (q *Queries) DeleteReport(ctx context.Context, reportID int32) error {
 	return err
 }
 
+const getReason = `-- name: GetReason :one
+SELECT
+    reason
+FROM report_reasons
+WHERE
+    reason = $1
+`
+
+func (q *Queries) GetReason(ctx context.Context, reason string) (string, error) {
+	row := q.db.QueryRow(ctx, getReason, reason)
+	err := row.Scan(&reason)
+	return reason, err
+}
+
 const getReasons = `-- name: GetReasons :many
 SELECT
     reason

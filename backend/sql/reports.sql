@@ -59,3 +59,10 @@ DELETE FROM
     report_reasons
 WHERE
     reason = $1;
+
+-- name: GetReason :one
+SELECT
+    *
+FROM report_reasons
+WHERE
+    reason = $1;
