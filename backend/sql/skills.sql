@@ -13,3 +13,10 @@ WHERE
 SELECT
     *
 FROM skills;
+
+-- name: GetSkill :one
+SELECT
+    *
+FROM skills
+WHERE
+    skill = $1;

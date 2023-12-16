@@ -33,6 +33,20 @@ func (q *Queries) DeleteSkill(ctx context.Context, skill string) error {
 	return err
 }
 
+const getSkill = `-- name: GetSkill :one
+SELECT
+    skill
+FROM skills
+WHERE
+    skill = $1
+`
+
+func (q *Queries) GetSkill(ctx context.Context, skill string) (string, error) {
+	row := q.db.QueryRow(ctx, getSkill, skill)
+	err := row.Scan(&skill)
+	return skill, err
+}
+
 const getSkills = `-- name: GetSkills :many
 SELECT
     skill

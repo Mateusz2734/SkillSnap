@@ -23,6 +23,9 @@ func (app *application) routes() http.Handler {
 	mux.Group(func(mux *flow.Mux) {
 		mux.Use(app.requireAuthenticatedUser)
 
+		mux.HandleFunc("/offers", app.getOffers, "GET")
+		mux.HandleFunc("/offers", app.addOffer, "POST")
+		mux.HandleFunc("/offers/:offerID", app.deleteOffer, "DELETE")
 		mux.HandleFunc("/users/:userID", app.deleteUser, "DELETE")
 		mux.HandleFunc("/categories", app.getCategories, "GET")
 		mux.HandleFunc("/skills", app.getSkills, "GET")
