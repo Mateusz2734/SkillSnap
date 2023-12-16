@@ -6,6 +6,10 @@ import (
 )
 
 func JSONSuccess(w http.ResponseWriter, data map[string]interface{}) error {
+	if data == nil {
+		data = map[string]interface{}{}
+	}
+
 	data["status"] = "success"
 
 	return JSON(w, http.StatusOK, data)
