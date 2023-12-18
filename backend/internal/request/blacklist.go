@@ -1,7 +1,6 @@
 package request
 
 import (
-	"fmt"
 	"sync"
 )
 
@@ -20,7 +19,6 @@ func NewTokenBlacklist() *TokenBlacklist {
 func (list *TokenBlacklist) AddToken(token string) {
 	list.rwMutex.Lock()
 	defer list.rwMutex.Unlock()
-	fmt.Printf("Map: %+v\n", list.innerMmap)
 	list.innerMmap[token] = true
 }
 
