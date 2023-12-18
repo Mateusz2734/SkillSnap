@@ -97,6 +97,7 @@ func (app *application) createAuthenticationToken(w http.ResponseWriter, r *http
 	data := map[string]interface{}{
 		"authenticationToken":       string(jwtBytes),
 		"authenticationTokenExpiry": expiry.Format(time.RFC3339),
+		"user":                      user,
 	}
 
 	err = response.JSONSuccess(w, data)
