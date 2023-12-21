@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 const Missing = () => {
     return (
@@ -9,7 +9,7 @@ const Missing = () => {
                 <Link to="/">Visit Our Homepage</Link>
             </div>
         </article>
-    )
-}
+    );
+};
 
-export default Missing
+export default Missing;

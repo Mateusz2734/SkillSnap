@@ -163,6 +163,7 @@ const Register = () => {
             <input
               type="password"
               id="password"
+              autoComplete="new-password"
               onChange={(e) => setPwd(e.target.value)}
               value={pwd}
               required
@@ -203,6 +204,7 @@ const Register = () => {
             <input
               type="password"
               id="confirm_pwd"
+              autoComplete="new-password"
               onChange={(e) => setMatchPwd(e.target.value)}
               value={matchPwd}
               required

@@ -1,15 +1,18 @@
-import "./App.css";
-import Register from "./components/Register";
-import Login from "./components/Login";
-import Home from "./components/Home";
-import Layout from "./components/Layout";
-import Admin from "./components/Admin";
-import Missing from "./components/Missing";
-import Unauthorized from "./components/Unauthorized";
-import LinkPage from "./components/LinkPage";
-import RequireAuth from "./components/RequireAuth";
-import PublicPage from "./components/PublicPage";
 import { Routes, Route } from "react-router-dom";
+
+import RequireAuth from "./components/RequireAuth";
+
+import Register from "./pages/RegisterPage";
+import Login from "./pages/LoginPage";
+import Home from "./pages/HomePage";
+import Layout from "./components/Layout";
+import Admin from "./pages/AdminPage";
+import Missing from "./pages/MissingPage";
+import Unauthorized from "./pages/UnauthorizedPage";
+import LinkPage from "./pages/LinkPage";
+import PublicPage from "./pages/PublicPage";
+
+import "./App.css";
 
 const ROLES = {
   User: "user",

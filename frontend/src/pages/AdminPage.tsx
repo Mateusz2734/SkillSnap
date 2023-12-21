@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 const Admin = () => {
     return (
@@ -10,7 +10,7 @@ const Admin = () => {
                 <Link to="/">Home</Link>
             </div>
         </section>
-    )
-}
+    );
+};
 
-export default Admin
+export default Admin;

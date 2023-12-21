@@ -75,6 +75,7 @@ const Login = () => {
         <input
           type="password"
           id="password"
+          autoComplete="current-password"
           onChange={(e) => setPwd(e.target.value)}
           value={pwd}
           required
