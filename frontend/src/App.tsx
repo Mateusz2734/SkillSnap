@@ -11,6 +11,7 @@ import Missing from "./pages/MissingPage";
 import Unauthorized from "./pages/UnauthorizedPage";
 import LinkPage from "./pages/LinkPage";
 import PublicPage from "./pages/PublicPage";
+import Health from "./pages/HealthPage";
 
 import "./App.css";
 
@@ -29,6 +30,7 @@ function App() {
         <Route path="register" element={<Register />} />
         <Route path="linkpage" element={<LinkPage />} />
         <Route path="unauthorized" element={<Unauthorized />} />
+        <Route path="health" element={<Health />} />
 
         {/* PROTECTED */}
         <Route
