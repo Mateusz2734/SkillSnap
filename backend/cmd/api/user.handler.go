@@ -81,7 +81,7 @@ func (app *application) createUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := map[string]interface{}{
-		"userID": user.UserID,
+		"user": user,
 	}
 
 	err = response.JSONSuccess(w, data)
