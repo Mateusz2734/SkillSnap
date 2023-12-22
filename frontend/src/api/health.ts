@@ -4,7 +4,7 @@ import { AxiosError } from "axios";
 import { ApiError, GetHealthResponse } from "../types/types";
 import api from "./api";
 
-export function useHealth() {
+export function useGetHealth() {
   return useQuery<GetHealthResponse, ApiError>({
     queryKey: ["health"],
     queryFn: async () => {

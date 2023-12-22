@@ -1,8 +1,8 @@
-import { useHealth } from "../api/health";
+import { useGetHealth } from "../api/health";
 import { Spinner } from "../components/Spinner";
 
 const Health = () => {
-  const { data, error, isLoading, isError } = useHealth();
+  const { data, error, isLoading, isError } = useGetHealth();
 
   if (isLoading) return <Spinner />;
 
