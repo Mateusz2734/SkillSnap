@@ -1,28 +1,21 @@
-import { useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
-import api from './api';
-
-export type HealthResponse = {
-  status: string;
-};
-
-export type HealthError = {
-  status: string;
-};
+import { ApiError, GetHealthResponse } from "../types/types";
+import api from "./api";
 
 export function useHealth() {
-  return useQuery<HealthResponse, HealthError>({
+  return useQuery<GetHealthResponse, ApiError>({
     queryKey: ["health"],
     queryFn: async () => {
       try {
-        const { data } = await api.get<HealthResponse>("/health");
+        const { data } = await api.get<GetHealthResponse>("/health");
         return data;
       } catch (error) {
-        const e = error as AxiosError<HealthError>;
+        const e = error as AxiosError<ApiError>;
         return Promise.reject(e.response?.data);
       }
     },
-    throwOnError: false
+    throwOnError: false,
   });
-};
+}

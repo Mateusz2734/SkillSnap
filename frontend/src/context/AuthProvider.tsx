@@ -1,20 +1,9 @@
 import { createContext, useState } from "react";
 import axios from "axios";
 
+import { User, Credentials } from "../types/types";
+
 export const AuthContext = createContext<AuthContextType | null>(null);
-
-export type User = {
-  id: number;
-  username: string;
-  role: string;
-  discordUsername: string;
-  createdAt: Date;
-};
-
-type Credentials = {
-  username: string;
-  password: string;
-};
 
 export type AuthContextType = {
   user: User | null;
@@ -41,12 +30,10 @@ export const AuthProvider = ({ children }: Props) => {
         body: JSON.stringify(credentials),
       });
 
-      const res = await response.json();
+      const { user, authenticationToken } = await response.json();
 
-      console.log(res);
-
-      setUser(res.user);
-      setToken(res.authenticationToken);
+      setUser(user);
+      setToken(authenticationToken);
     } catch (err) {
       console.log(err);
       if (axios.isAxiosError(err)) {
