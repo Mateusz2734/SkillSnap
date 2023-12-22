@@ -12,6 +12,7 @@ import Unauthorized from "./pages/UnauthorizedPage";
 import LinkPage from "./pages/LinkPage";
 import PublicPage from "./pages/PublicPage";
 import Health from "./pages/HealthPage";
+import OffersPage from "./pages/OffersPage";
 
 import "./App.css";
 
@@ -37,6 +38,7 @@ function App() {
           element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Admin]} />}
         >
           <Route path="/home" element={<Home />} />
+          <Route path="/offers" element={<OffersPage />} />
         </Route>
 
         <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>

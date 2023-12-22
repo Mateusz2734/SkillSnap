@@ -79,6 +79,11 @@ export type PostOfferResponse = Status & {
   offer: Offer;
 };
 
+export type PostOfferPayload = {
+  skill: string;
+  description: string;
+};
+
 export type DeleteOfferResponse = Status;
 
 export type GetOfferResponse = Status & {
