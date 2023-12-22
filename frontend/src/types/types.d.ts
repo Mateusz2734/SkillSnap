@@ -84,3 +84,64 @@ export type DeleteOfferResponse = Status;
 export type GetOfferResponse = Status & {
   offer: Offer;
 };
+
+export type GetReportsResponse = Status & {
+  reports: Report[];
+};
+
+export type PostReportResponse = Status & {
+  report: Report;
+};
+
+export type GetCategoriesResponse = Status & {
+  categories: Category[];
+};
+
+export type PostCategoryResponse = Status & {
+  category: Category;
+};
+
+export type GetSkillsResponse = Status & {
+  skills: Skill[];
+};
+
+export type PostSkillResponse = Status & {
+  skill: Skill;
+};
+
+export type GetCategoriesBySkillResponse = GetCategoriesResponse;
+
+export type GetGeneralStatsResponse = Status & {
+  userCount: number;
+  offerCount: number;
+  reviewCountByStars: {
+    starCount: number;
+    count: number;
+  }[];
+  offerCountByCategory: {
+    category: string;
+    count: number;
+  }[];
+  offerCountBySkill: {
+    skill: string;
+    count: number;
+  }[];
+};
+
+export type GetUserStatsResponse = Status & {
+  userID: number;
+  reportCount: number;
+  reviewCount: number;
+  offerCount: number;
+  averageStars: number;
+};
+
+export type PostUserResponse = Status & {
+  user: User;
+};
+
+export type GetUsersResponse = Status & {
+  users: User[];
+};
+
+export type DeleteUserResponse = Status;
