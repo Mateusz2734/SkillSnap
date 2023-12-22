@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
+import { useSessionStorage } from "@uidotdev/usehooks";
 import axios from "axios";
 
 import { User, Credentials } from "../types/types";
@@ -17,8 +18,8 @@ type Props = {
 };
 
 export const AuthProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useSessionStorage<User | null>("user", null);
+  const [token, setToken] = useSessionStorage<string | null>("token", null);
 
   const logIn = async (credentials: Credentials) => {
     try {
