@@ -63,6 +63,14 @@ type Status = {
   status: string;
 };
 
+export type PostAuthLoginResponse = Status & {
+  authenticationToken: string;
+  authenticationTokenExpiry: Date;
+  user: User;
+};
+
+export type GetAuthLogoutResponse = Status;
+
 export type GetHealthResponse = Status;
 
 type Meta = {

@@ -1,8 +1,14 @@
 import { createContext } from "react";
 import { useSessionStorage } from "@uidotdev/usehooks";
-import axios from "axios";
+import { toast } from "react-toastify";
 
-import { User, Credentials } from "../types/types";
+import {
+  User,
+  Credentials,
+  PostAuthLoginResponse,
+  GetAuthLogoutResponse,
+} from "../types/types";
+import api from "../api/api";
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -23,35 +29,27 @@ export const AuthProvider = ({ children }: Props) => {
 
   const logIn = async (credentials: Credentials) => {
     try {
-      const response = await fetch("http://localhost:4444/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      });
+      const { data } = await api.post<PostAuthLoginResponse>(
+        "/auth/login",
+        JSON.stringify(credentials)
+      );
 
-      const { user, authenticationToken } = await response.json();
-
-      setUser(user);
-      setToken(authenticationToken);
+      setUser(data?.user);
+      setToken(data?.authenticationToken);
     } catch (err) {
-      console.log(err);
-      if (axios.isAxiosError(err)) {
-        console.log(err.response?.data);
-      }
+      console.error(err);
+      toast.error("An error occured while logging in");
+      setUser(null);
+      setToken(null);
     }
   };
 
   const logOut = async () => {
-    await fetch("http://localhost:4444/auth/logout", {
-      method: "GET",
+    await api.get<GetAuthLogoutResponse>("/auth/logout", {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-
     setUser(null);
     setToken(null);
   };
