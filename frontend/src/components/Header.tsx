@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
+import Logo from "../assets/logo.svg";
+
 const Header = () => {
   const { user, logOut } = useAuth();
   const navigate = useNavigate();
@@ -23,8 +25,9 @@ const Header = () => {
   return (
     <div className="header">
       <Link to="/">
-        <span>SkillShare</span>
+        <img src={Logo} alt="SkillShare Logo" width={100} />
       </Link>
+      {/* <span>SkillShare</span> */}
 
       {user ? (
         <button onClick={handleLogOut}>Log Out</button>
