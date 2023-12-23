@@ -116,7 +116,7 @@ func (app *application) getUserStats(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := map[string]interface{}{
-		"userID":       userID32,
+		"userId":       userID32,
 		"reportCount":  reportCount,
 		"offerCount":   offerCount,
 		"reviewCount":  reviewCount,

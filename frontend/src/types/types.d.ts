@@ -12,7 +12,7 @@ export type Skill = {
 
 export type User = {
   createdAt: Date;
-  id: number;
+  userId: number;
   username: string;
   role: string;
   discordUsername: string;
@@ -25,18 +25,18 @@ type Credentials = {
 
 export type Offer = {
   createdAt: Date;
-  offerID: number;
-  userID: number;
+  offerId: number;
+  userId: number;
   skill: string;
   description: string;
 };
 
 export type Report = {
   createdAt: Date;
-  reportID: number;
-  reportingUserID: number;
-  reportedUserID?: number;
-  reportedOfferID?: number;
+  reportId: number;
+  reportingUserId: number;
+  reportedUserId?: number;
+  reportedOfferId?: number;
   reason: string;
   description: string;
   status: string;
@@ -44,9 +44,9 @@ export type Report = {
 
 export type Review = {
   createdAt: Date;
-  reviewID: number;
-  reviewerUserID: number;
-  reviewedUserID: number;
+  reviewId: number;
+  reviewingUserId: number;
+  reviewedUserId: number;
   rating: number;
   description: string;
 };
@@ -98,6 +98,14 @@ export type PostReportResponse = Status & {
   report: Report;
 };
 
+export type PostReportPayload = {
+  reportedUserId?: number;
+  reportedOfferId?: number;
+  reason: string;
+  description: string;
+  status: string;
+};
+
 export type GetCategoriesResponse = Status & {
   categories: Category[];
 };
@@ -134,7 +142,7 @@ export type GetGeneralStatsResponse = Status & {
 };
 
 export type GetUserStatsResponse = Status & {
-  userID: number;
+  userId: number;
   reportCount: number;
   reviewCount: number;
   offerCount: number;
