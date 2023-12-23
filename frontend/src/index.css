@@ -2,12 +2,14 @@
 
 :root {
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: #fefefe;
 
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  overflow-x: hidden;
 }
 
 * {
@@ -32,6 +34,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  min-width: 99vw;
   padding: 1rem 0.5rem;
 }
 
@@ -56,7 +59,7 @@ form {
 
 a,
 a:visited {
-  color: #fff;
+  color: rgba(0, 0, 0, 0.87);
 }
 
 input[type="text"],
@@ -76,6 +79,7 @@ button {
 
 button {
   padding: 0.5rem;
+  cursor: pointer;
 }
 
 .instructions {
@@ -131,8 +135,7 @@ button {
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+  width: 99vw;
+  display: grid;
+  grid-template-columns: 1fr 7fr 4fr;
 }

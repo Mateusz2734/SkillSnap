@@ -27,16 +27,17 @@ const Header = () => {
       <Link to="/">
         <img src={Logo} alt="SkillShare Logo" width={100} />
       </Link>
-      {/* <span>SkillShare</span> */}
-
-      {user ? (
-        <button onClick={handleLogOut}>Log Out</button>
-      ) : (
-        <>
-          <button onClick={navigateToLogin}>Log In</button>
-          <button onClick={navigateToRegister}>Register</button>
-        </>
-      )}
+      <div className="links"></div>
+      <div className="buttons">
+        {user ? (
+          <button onClick={handleLogOut}>Log Out</button>
+        ) : (
+          <>
+            <button onClick={navigateToLogin}>Log In</button>
+            <button onClick={navigateToRegister}>Register</button>
+          </>
+        )}
+      </div>
     </div>
   );
 };
