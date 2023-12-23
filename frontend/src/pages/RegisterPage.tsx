@@ -51,7 +51,6 @@ const Register = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // if button enabled with JS hack
     const v1 = USER_REGEX.test(user);
     const v2 = PWD_REGEX.test(pwd);
     if (!v1 || !v2) {
@@ -59,19 +58,11 @@ const Register = () => {
       return;
     }
     try {
-      const response = await api.post(
-        REGISTER_URL,
-        JSON.stringify({ user, pwd }),
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-      // TODO: remove console.logs before deployment
-      console.log(JSON.stringify(response?.data));
-      //console.log(JSON.stringify(response))
+      await api.post(REGISTER_URL, JSON.stringify({ user, pwd }), {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      });
       setSuccess(true);
-      //clear state and controlled inputs
       setUser("");
       setPwd("");
       setMatchPwd("");

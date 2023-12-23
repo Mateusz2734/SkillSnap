@@ -21,7 +21,7 @@ const Offers = () => {
         <br />
         {data?.offers.map((offer) => (
           <>
-            <div key={offer.offerID}>
+            <div key={offer.offerId}>
               <p>Description: {offer.description}</p>
               <p>Skill: {offer.skill}</p>
             </div>
