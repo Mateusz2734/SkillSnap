@@ -34,6 +34,9 @@ func (app *application) routes() http.Handler {
 		mux.HandleFunc("/categories", app.getCategories, "GET")
 		mux.HandleFunc("/skills", app.getSkills, "GET")
 		mux.HandleFunc("/categories/:skill", app.getCategoriesBySkill, "GET")
+		mux.HandleFunc("/reviews", app.getReviews, "GET")
+		mux.HandleFunc("/reviews", app.addReview, "POST")
+		mux.HandleFunc("/reviews/:reviewID", app.deleteReview, "DELETE")
 	})
 
 	mux.Group(func(mux *flow.Mux) {
