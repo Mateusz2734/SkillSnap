@@ -166,3 +166,21 @@ export type GetUsersResponse = Status & {
 };
 
 export type DeleteUserResponse = Status;
+
+export type GetReviewsResponse = Status & {
+  reviewingUserId?: number;
+  reviewedUserId?: number;
+  reviews: Review[];
+};
+
+export type PostReviewResponse = Status & {
+  review: Review;
+};
+
+export type PostReviewPayload = {
+  reviewedUserId: number;
+  starCount: number;
+  review: string;
+};
+
+export type DeleteReviewResponse = Status;

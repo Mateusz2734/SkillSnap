@@ -31,7 +31,7 @@ export function useGetGeneralStats() {
   });
 }
 
-export function useUserStats(userID: number) {
+export function useGetUserStats(userID: number) {
   const { token } = useAuth();
   const config = { headers: { Authorization: `Bearer ${token}` } };
 

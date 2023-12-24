@@ -15,11 +15,11 @@ export function useGetReports() {
   const config = { headers: { Authorization: `Bearer ${token}` } };
 
   return useQuery<GetReportsResponse, ApiError>({
-    queryKey: ["stats"],
+    queryKey: ["reports"],
     queryFn: async () => {
       try {
         const { data } = await api.get<GetReportsResponse>(
-          "/admin/stats/general",
+          "/admin/reports",
           config
         );
         return data;
@@ -32,17 +32,17 @@ export function useGetReports() {
   });
 }
 
-export function usePostOffer(payload: PostReportPayload) {
+export function usePostReport(payload: PostReportPayload) {
   const { token } = useAuth();
 
   const config = { headers: { Authorization: `Bearer ${token}` } };
 
   return useMutation<PostReportResponse, ApiError>({
-    mutationKey: ["offers"],
+    mutationKey: ["reports"],
     mutationFn: async () => {
       try {
         const { data } = await api.post<PostReportResponse>(
-          "/offers",
+          "/reports",
           payload,
           config
         );
