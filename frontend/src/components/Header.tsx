@@ -27,7 +27,10 @@ const Header = () => {
       <Link to="/">
         <img src={Logo} alt="SkillShare Logo" width={100} />
       </Link>
-      <div className="links"></div>
+      <div className="links">
+        <Link to="/offers">Offers</Link>
+        {user?.role === "admin" && <Link to="/admin">Dashboard</Link>}
+      </div>
       <div className="buttons">
         {user ? (
           <button onClick={handleLogOut}>Log Out</button>

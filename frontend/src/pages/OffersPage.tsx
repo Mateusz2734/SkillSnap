@@ -22,6 +22,9 @@ const Offers = () => {
         {data?.offers.map((offer) => (
           <>
             <div key={offer.offerId}>
+              <img
+                src={`https://api.dicebear.com/7.x/identicon/svg?seed=${offer.userId}&size=96`}
+              />
               <p>Description: {offer.description}</p>
               <p>Skill: {offer.skill}</p>
             </div>
