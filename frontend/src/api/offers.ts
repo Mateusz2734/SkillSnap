@@ -32,6 +32,29 @@ export function useGetOffers() {
   });
 }
 
+export function useGetUserOffers(userId: number) {
+  const { token } = useAuth();
+
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+
+  return useQuery<GetOffersResponse, ApiError>({
+    queryKey: ["offers"],
+    queryFn: async () => {
+      try {
+        const { data } = await api.get<GetOffersResponse>(
+          `/users/${userId}/offers`,
+          config
+        );
+        return data;
+      } catch (error) {
+        const e = error as AxiosError<ApiError>;
+        return Promise.reject(e.response?.data);
+      }
+    },
+    throwOnError: false,
+  });
+}
+
 export function useGetOffer(offerId: number) {
   const { token } = useAuth();
 

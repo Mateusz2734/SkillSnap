@@ -13,6 +13,7 @@ import LinkPage from "./pages/LinkPage";
 import PublicPage from "./pages/PublicPage";
 import Health from "./pages/HealthPage";
 import OffersPage from "./pages/OffersPage";
+import Profile from "./pages/ProfilePage";
 
 import "./App.css";
 
@@ -39,6 +40,7 @@ function App() {
         >
           <Route path="/home" element={<Home />} />
           <Route path="/offers" element={<OffersPage />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
 
         <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
