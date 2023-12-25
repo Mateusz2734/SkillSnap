@@ -1,48 +1,98 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
+import {
+  Avatar,
+  Box,
+  Dropdown,
+  Menu,
+  MenuButton,
+  Button,
+  MenuItem,
+} from "@mui/joy";
+
 import Logo from "../assets/logo.svg";
 
 const Header = () => {
   const { user, logOut } = useAuth();
   const navigate = useNavigate();
 
-  const navigateToLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     navigate("/login");
   };
 
-  const navigateToRegister = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleRegister = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     navigate("/register");
   };
 
-  const handleLogOut = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleLogOut = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     logOut();
   };
 
+  const handleProfile = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    navigate("/profile");
+  };
+
   return (
     <div className="header">
-      <Link to="/">
-        <img src={Logo} alt="SkillShare Logo" width={100} />
+      <Link to="/" style={{ margin: "0em 1em" }}>
+        <img src={Logo} alt="SkillShare Logo" width={70} />
       </Link>
-      <div className="links">
-        <Link to="/offers">Offers</Link>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+          marginRight: "2em",
+          justifyContent: "flex-start",
+          alignItems: "center",
+        }}
+      >
+        <Link style={{ fontWeight: 900 }} to="/offers">
+          Offers
+        </Link>
         {user?.role === "admin" && <Link to="/admin">Dashboard</Link>}
-      </div>
-      <div className="buttons">
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+          marginRight: "2em",
+          justifyContent: "flex-end",
+          alignItems: "center",
+        }}
+      >
         {user ? (
-          <button onClick={handleLogOut}>Log Out</button>
+          <Dropdown>
+            <MenuButton sx={{ padding: 0, border: "none" }}>
+              <Avatar
+                alt={user.userId.toString()}
+                src={`${apiUrl}?seed=${user.userId}`}
+              />
+            </MenuButton>
+            <Menu>
+              <MenuItem onClick={handleProfile}>Profile</MenuItem>
+              <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
+            </Menu>
+          </Dropdown>
         ) : (
           <>
-            <button onClick={navigateToLogin}>Log In</button>
-            <button onClick={navigateToRegister}>Register</button>
+            <Button variant="outlined" onClick={handleLogin}>
+              Log In
+            </Button>
+            <Button variant="solid" onClick={handleRegister}>
+              Register
+            </Button>
           </>
         )}
-      </div>
+      </Box>
     </div>
   );
 };
+
+const apiUrl = "https://api.dicebear.com/7.x/identicon/svg";
 
 export default Header;

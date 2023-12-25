@@ -24,6 +24,11 @@ html {
   color: #fff;
 }
 
+a {
+  text-decoration: none;
+  font-weight: 900;
+}
+
 body {
   min-height: 100vh;
 }
