@@ -187,3 +187,33 @@ func (app *application) getOffer(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, r, err)
 	}
 }
+
+func (app *application) getUserOffers(w http.ResponseWriter, r *http.Request) {
+	userID, err := strconv.ParseInt(flow.Param(r.Context(), "userId"), 10, 32)
+
+	if err != nil {
+		app.badRequest(w, r, err)
+		return
+	}
+
+	offers, err := app.db.GetOffersByUser(r.Context(), int32(userID))
+
+	if err != nil && err != pgx.ErrNoRows {
+		app.serverError(w, r, err)
+		return
+	}
+
+	if offers == nil {
+		offers = []*db.Offer{}
+	}
+
+	data := map[string]interface{}{
+		"offers": offers,
+	}
+
+	err = response.JSONSuccess(w, data)
+
+	if err != nil {
+		app.serverError(w, r, err)
+	}
+}

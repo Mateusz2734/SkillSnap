@@ -111,7 +111,7 @@ func (app *application) getUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) deleteUser(w http.ResponseWriter, r *http.Request) {
-	userID, err := strconv.ParseInt(flow.Param(r.Context(), "userID"), 10, 32)
+	userID, err := strconv.ParseInt(flow.Param(r.Context(), "userId"), 10, 32)
 
 	if err != nil {
 		app.badRequest(w, r, err)

@@ -64,7 +64,7 @@ func (app *application) getGeneralStats(w http.ResponseWriter, r *http.Request) 
 func (app *application) getUserStats(w http.ResponseWriter, r *http.Request) {
 	val := validator.Validator{}
 
-	userID, err := strconv.ParseInt(flow.Param(r.Context(), "userID"), 10, 32)
+	userID, err := strconv.ParseInt(flow.Param(r.Context(), "userId"), 10, 32)
 
 	if err != nil {
 		val.AddError("userID must be a number")
