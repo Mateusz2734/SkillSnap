@@ -1,14 +1,8 @@
-export type Category = {
-  category: string;
-};
+export type Category = string;
 
-export type ReportReason = {
-  reason: string;
-};
+export type ReportReason = string;
 
-export type Skill = {
-  skill: string;
-};
+export type Skill = string;
 
 export type User = {
   createdAt: Date;
