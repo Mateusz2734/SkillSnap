@@ -1,7 +1,9 @@
 import { useRef, useState, useEffect, FormEvent } from "react";
-import { useAuth } from "../hooks/useAuth";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
+
+import { useAuth } from "../hooks/useAuth";
 
 const Login = () => {
   const { logIn } = useAuth();
@@ -16,6 +18,12 @@ const Login = () => {
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
+
+  useEffect(() => {
+    if (from !== "/" && from !== "/home") {
+      toast.info("You must be logged in to view that page");
+    }
+  }, [from]);
 
   useEffect(() => {
     userRef?.current?.focus();

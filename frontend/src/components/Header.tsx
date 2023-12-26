@@ -9,7 +9,13 @@ import {
   MenuButton,
   Button,
   MenuItem,
+  Divider,
 } from "@mui/joy";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowRightFromBracket,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 
 import Logo from "../assets/logo.svg";
 
@@ -73,9 +79,16 @@ const Header = () => {
                 src={`${apiUrl}?seed=${user.userId}`}
               />
             </MenuButton>
-            <Menu>
-              <MenuItem onClick={handleProfile}>Profile</MenuItem>
-              <MenuItem onClick={handleLogOut}>Log Out</MenuItem>
+            <Menu variant="solid" color="primary">
+              <MenuItem onClick={handleProfile}>
+                <FontAwesomeIcon icon={faUser} />
+                Profile
+              </MenuItem>
+              <Divider orientation="horizontal" color="red" />
+              <MenuItem onClick={handleLogOut}>
+                <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                Log Out
+              </MenuItem>
             </Menu>
           </Dropdown>
         ) : (
