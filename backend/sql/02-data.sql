@@ -64,8 +64,7 @@ INSERT INTO skill_categories VALUES
 ('Software Development', 'Tech'),
 ('Web Design', 'Software'),
 ('Web Design', 'Computers'),
-('Web Design', 'Tech');
-
+('Web Design', 'Tech'),
 ('Skateboarding', 'Sports'),
 ('Skateboarding', 'Summer'),
 ('Snowboarding', 'Sports'),
@@ -75,7 +74,7 @@ INSERT INTO offers (user_id, skill, description) VALUES
 (1, 'Golang Programming', 'I am a senior go dev, want to help you'),
 (2, 'Skateboarding', 'Do you want to learn some kickflips?'),
 (3, 'Snowboarding', 'I can teach you how to do a 360'),
-(4, 'Skiing', 'Do you want some skiing basics? I can help you with that!')
+(4, 'Skiing', 'Do you want some skiing basics? I can help you with that!'),
 (5, 'Mountain Biking', 'I think that you need some help with your biking skills'),
 (6, 'Game Development', 'After our lessons you will be able to create your own game!'),
 (7, 'Software Development', 'I can teach you how to document your projects properly'),
