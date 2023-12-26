@@ -64,11 +64,7 @@ INSERT INTO skill_categories VALUES
 ('Software Development', 'Tech'),
 ('Web Design', 'Software'),
 ('Web Design', 'Computers'),
-('Web Design', 'Tech'),
-('Skateboarding', 'Sports'),
-('Skateboarding', 'Summer'),
-('Snowboarding', 'Sports'),
-('Snowboarding', 'Winter');
+('Web Design', 'Tech');
 
 INSERT INTO offers (user_id, skill, description) VALUES
 (1, 'Golang Programming', 'I am a senior go dev, want to help you'),
