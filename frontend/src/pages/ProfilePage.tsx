@@ -1,4 +1,5 @@
 import { useGetUserOffers } from "../api/offers";
+import { OfferCard } from "../components/OfferCard";
 import { useAuth } from "../hooks/useAuth";
 
 const Profile = () => {
@@ -9,11 +10,9 @@ const Profile = () => {
     <div>
       <h1>Profile</h1>
       <h2>My Offers</h2>
-      <ul>
-        {data?.offers?.map((offer) => (
-          <li key={offer.offerId}>{offer.description}</li>
-        ))}
-      </ul>
+      {data?.offers?.map((offer) => (
+        <OfferCard key={offer.offerId} offer={offer} editable />
+      ))}
     </div>
   );
 };

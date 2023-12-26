@@ -1,5 +1,6 @@
 import { useGetOffers } from "../api/offers";
 import { Spinner } from "../components/Spinner";
+import { OfferCard } from "../components/OfferCard";
 
 const Offers = () => {
   const { data, error, isLoading } = useGetOffers();
@@ -16,22 +17,11 @@ const Offers = () => {
 
   return (
     <>
-      <section>
-        <h1>Offers</h1>
-        <br />
-        {data?.offers.map((offer) => (
-          <>
-            <div key={offer.offerId}>
-              <img
-                src={`https://api.dicebear.com/7.x/identicon/svg?seed=${offer.userId}&size=96`}
-              />
-              <p>Description: {offer.description}</p>
-              <p>Skill: {offer.skill}</p>
-            </div>
-            <br />
-          </>
-        ))}
-      </section>
+      {data?.offers.map((offer) => (
+        <>
+          <OfferCard key={offer.offerId} offer={offer} />
+        </>
+      ))}
     </>
   );
 };

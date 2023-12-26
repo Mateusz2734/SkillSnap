@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 import {
@@ -80,6 +80,7 @@ export function useGetOffer(offerId: number) {
 
 export function useDeleteOffer(offerId: number) {
   const { token } = useAuth();
+  const queryClient = useQueryClient();
 
   const config = { headers: { Authorization: `Bearer ${token}` } };
 
@@ -98,6 +99,9 @@ export function useDeleteOffer(offerId: number) {
       }
     },
     throwOnError: false,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["offers"] });
+    },
   });
 }
 
