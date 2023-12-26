@@ -1,16 +1,27 @@
+import { faUser, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+
 import { useGetGeneralStats } from "../api/stats";
+import { DataCard } from "../components/DataCard";
 
 const Admin = () => {
   const { data } = useGetGeneralStats();
 
   return (
-    <section>
+    <>
       <h1>Admin Dashboard</h1>
-      <div>{data?.userCount && <p>Number of users: {data.userCount}</p>}</div>
-      <div>
-        {data?.offerCount && <p>Number of offers: {data.offerCount}</p>}
-      </div>
-    </section>
+
+      {data?.userCount && (
+        <DataCard label="User Count" value={data?.userCount} icon={faUser} />
+      )}
+      <br />
+      {data?.offerCount && (
+        <DataCard
+          label="Offer Count"
+          value={data?.offerCount}
+          icon={faEnvelope}
+        />
+      )}
+    </>
   );
 };
 
