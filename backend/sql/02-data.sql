@@ -15,6 +15,7 @@ SET role = 'admin'
 WHERE username = 'admin';
 
 INSERT INTO skills VALUES 
+('Other'),
 ('JavaScript Programming'),
 ('TypeScript Programming'),
 ('Java Programming'),

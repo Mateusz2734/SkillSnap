@@ -1,6 +1,7 @@
 // Hardcoded for now, but will be fetched from the backend if I have time to implement it
 
 export const skills = [
+  "Other",
   "JavaScript Programming",
   "TypeScript Programming",
   "Java Programming",
