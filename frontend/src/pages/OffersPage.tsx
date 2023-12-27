@@ -15,12 +15,12 @@ const Offers = () => {
       </>
     );
 
+  if (!data || data.offers.length === 0) return <p>No offers found</p>;
+
   return (
     <>
       {data?.offers.map((offer) => (
-        <>
-          <OfferCard key={offer.offerId} offer={offer} />
-        </>
+        <OfferCard key={offer.offerId} offer={offer} />
       ))}
     </>
   );

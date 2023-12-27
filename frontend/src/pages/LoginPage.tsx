@@ -10,7 +10,7 @@ const Login = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/home";
+  const from = location.state?.from?.pathname || "/";
 
   const userRef = useRef<HTMLInputElement>(null);
   const errRef = useRef<HTMLParagraphElement>(null);
@@ -20,7 +20,7 @@ const Login = () => {
   const [errMsg, setErrMsg] = useState("");
 
   useEffect(() => {
-    if (from !== "/" && from !== "/home") {
+    if (from !== "/" && from !== "/register" && from !== "/logout") {
       toast.info("You must be logged in to view that page");
     }
   }, [from]);
