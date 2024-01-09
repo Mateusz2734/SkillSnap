@@ -9,11 +9,8 @@ import Admin from "./pages/AdminPage";
 import Missing from "./pages/MissingPage";
 import Unauthorized from "./pages/UnauthorizedPage";
 import PublicPage from "./pages/PublicPage";
-import Health from "./pages/HealthPage";
 import OffersPage from "./pages/OffersPage";
 import Profile from "./pages/ProfilePage";
-
-import "./App.css";
 
 const ROLES = {
   User: "user",
