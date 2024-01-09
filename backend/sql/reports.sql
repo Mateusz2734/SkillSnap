@@ -2,7 +2,7 @@
 -- name: AddReport :one
 INSERT INTO reports (reporting_user_id, reported_offer_id, reason, description, status)
 VALUES
-    ($1, $2, $3, $4, $5, $6) RETURNING *;
+    ($1, $2, $3, $4, $5) RETURNING *;
 
 -- name: DeleteReport :exec
 DELETE FROM
