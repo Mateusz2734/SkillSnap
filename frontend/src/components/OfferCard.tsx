@@ -11,7 +11,8 @@ import {
   Dropdown,
   Menu,
   MenuItem,
-  IconButton
+  IconButton,
+  ListItemDecorator,
 } from "@mui/joy";
 import { Offer } from "../types/types";
 import { Link } from "react-router-dom";
@@ -20,9 +21,11 @@ import {
   faTrash,
   faPenToSquare,
   faEllipsisVertical,
+  faFlag,
 } from "@fortawesome/free-solid-svg-icons";
 import { useDeleteOffer } from "../api/offers";
 import { SxProps } from "@mui/joy/styles/types";
+import { useAuth } from "../hooks/useAuth";
 
 export type OfferCardProps = {
   offer: Offer;
@@ -30,6 +33,7 @@ export type OfferCardProps = {
 };
 
 export const OfferCard = (props: OfferCardProps) => {
+  const { user } = useAuth();
   const { mutate } = useDeleteOffer(props.offer.offerId);
   const navigate = useNavigate();
 
@@ -52,31 +56,49 @@ export const OfferCard = (props: OfferCardProps) => {
 
   const cardSXProps: SxProps = !props.editable
     ? {
-      textAlign: "center",
-      alignItems: "center",
-      width: 343,
-      marginBottom: "1em",
-      "--icon-size": "100px",
-    }
+        textAlign: "center",
+        alignItems: "center",
+        width: 343,
+        marginBottom: "1em",
+        "--icon-size": "100px",
+      }
     : {
-      textAlign: "center",
-      alignItems: "center",
-      width: 343,
-      marginBottom: "1em",
-    };
+        textAlign: "center",
+        alignItems: "center",
+        width: 343,
+        marginBottom: "1em",
+      };
 
   const reportDropdown = (
     <Dropdown>
       <MenuButton
         sx={{ position: "absolute", right: 0, top: 0 }}
         slots={{ root: IconButton }}
-        slotProps={{ root: { variant: "plain", color: 'neutral' } }}
+        slotProps={{ root: { variant: "plain", color: "neutral" } }}
         size="sm"
       >
         <FontAwesomeIcon icon={faEllipsisVertical} />
       </MenuButton>
       <Menu size="sm">
-        <MenuItem onClick={() => navigate(`/report?offerId=${props.offer.offerId}`)}>Report offer</MenuItem>
+        {user?.userId !== props.offer.userId && (
+          <MenuItem
+            onClick={() => navigate(`/report?offerId=${props.offer.offerId}`)}
+          >
+            <ListItemDecorator>
+              <FontAwesomeIcon icon={faFlag} />
+            </ListItemDecorator>
+            Report offer
+          </MenuItem>
+        )}
+
+        {(user?.role === "admin" || props.offer.userId === user?.userId) && (
+          <MenuItem onClick={() => mutate()}>
+            <ListItemDecorator>
+              <FontAwesomeIcon icon={faTrash} color="red" />
+            </ListItemDecorator>
+            Delete offer
+          </MenuItem>
+        )}
       </Menu>
     </Dropdown>
   );
