@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Button, Modal, ModalDialog, DialogTitle, DialogContent } from "@mui/joy";
+import {
+  Button,
+  Modal,
+  ModalDialog,
+  DialogTitle,
+  DialogContent,
+} from "@mui/joy";
 
 import { useGetOffers } from "../api/offers";
 import { Spinner } from "../components/Spinner";
@@ -41,7 +47,6 @@ const Offers = () => {
           <OfferForm />
         </ModalDialog>
       </Modal>
-
 
       {data?.offers.map((offer) => (
         <OfferCard key={offer.offerId} offer={offer} />
