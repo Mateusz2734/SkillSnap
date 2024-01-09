@@ -1,8 +1,15 @@
+import { useState } from "react";
+import { Button, Modal, ModalDialog, DialogTitle, DialogContent } from "@mui/joy";
+
 import { useGetOffers } from "../api/offers";
 import { Spinner } from "../components/Spinner";
 import { OfferCard } from "../components/OfferCard";
+import { OfferForm } from "../components/OfferForm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 const Offers = () => {
+  const [open, setOpen] = useState<boolean>(false);
   const { data, error, isLoading } = useGetOffers();
 
   if (isLoading) return <Spinner />;
@@ -19,6 +26,23 @@ const Offers = () => {
 
   return (
     <>
+      <Button
+        variant="outlined"
+        color="neutral"
+        startDecorator={<FontAwesomeIcon icon={faPlus} />}
+        onClick={() => setOpen(true)}
+      >
+        New Offer
+      </Button>
+      <Modal keepMounted open={open} onClose={() => setOpen(false)}>
+        <ModalDialog>
+          <DialogTitle>Create new offer</DialogTitle>
+          <DialogContent>Fill in the information of the offer.</DialogContent>
+          <OfferForm />
+        </ModalDialog>
+      </Modal>
+
+
       {data?.offers.map((offer) => (
         <OfferCard key={offer.offerId} offer={offer} />
       ))}
