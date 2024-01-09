@@ -25,7 +25,7 @@ func (app *application) routes() http.Handler {
 		mux.Use(app.requireAuthenticatedUser)
 
 		mux.HandleFunc("/auth/logout", app.invalidateAuthenticationToken, "GET")
-		mux.HandleFunc("/reports", app.addReport, "GET")
+		mux.HandleFunc("/reports", app.addReport, "POST")
 		mux.HandleFunc("/offers", app.getOffers, "GET")
 		mux.HandleFunc("/offers", app.addOffer, "POST")
 		mux.HandleFunc("/offers/:offerId", app.deleteOffer, "DELETE")
