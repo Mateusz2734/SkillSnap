@@ -1,6 +1,6 @@
 -- //////////////// REPORTS ////////////////
 -- name: AddReport :one
-INSERT INTO reports (reporting_user_id, reported_user_id, reported_offer_id, reason, description, status)
+INSERT INTO reports (reporting_user_id, reported_offer_id, reason, description, status)
 VALUES
     ($1, $2, $3, $4, $5, $6) RETURNING *;
 
@@ -21,13 +21,6 @@ SELECT
 FROM reports
 WHERE
     report_id = $1;
-
--- name: GetReportsByReportedUser :many
-SELECT
-    *
-FROM reports
-WHERE
-    reported_user_id = $1;
 
 -- name: GetReportsByReportedOffer :many
 SELECT

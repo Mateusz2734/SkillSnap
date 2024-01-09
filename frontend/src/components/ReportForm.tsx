@@ -7,8 +7,7 @@ import { PostReportPayload } from "../types/types";
 import { reportReasons } from "../data/reportReasons";
 
 export type ReportFormProps = {
-  offerId?: number;
-  userId?: number;
+  offerId: number;
 };
 
 type FormValues = PostReportPayload;
@@ -21,14 +20,11 @@ export const ReportForm = (props: ReportFormProps) => {
     initialValues: {
       reason: "",
       description: "",
-      status: "pending",
+      status: "Pending",
+      reportedOfferId: props.offerId
     },
     onSubmit: (values) => {
-      mutate({
-        ...values,
-        reportedOfferId: props.offerId,
-        reportedUserId: props.userId,
-      });
+      mutate(values);
     },
     validate(values) {
       const errors: Partial<FormValues> = {};

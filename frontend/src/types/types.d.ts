@@ -29,8 +29,7 @@ export type Report = {
   createdAt: Date;
   reportId: number;
   reportingUserId: number;
-  reportedUserId?: number;
-  reportedOfferId?: number;
+  reportedOfferId: number;
   reason: string;
   description: string;
   status: string;
@@ -101,8 +100,7 @@ export type PostReportResponse = Status & {
 };
 
 export type PostReportPayload = {
-  reportedUserId?: number;
-  reportedOfferId?: number;
+  reportedOfferId: number;
   reason: string;
   description: string;
   status: string;

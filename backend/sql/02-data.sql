@@ -85,9 +85,8 @@ INSERT INTO report_reasons VALUES
 ('Offensive'),
 ('Other');
 
-INSERT INTO reports (reporting_user_id, reported_user_id, reported_offer_id, reason, description, status) VALUES
-(2, 9, NULL, 'Spam', 'This user is posting spam! Please do something with this', 'TODO'),
-(5, NULL, 9, 'Spam', 'Its a spam offer', 'TODO');
+INSERT INTO reports (reporting_user_id, reported_offer_id, reason, description, status) VALUES
+(5, 9, 'Spam', 'Its a spam offer', 'Pending');
 
 INSERT INTO reviews (reviewing_user_id, reviewed_user_id, star_count, review) VALUES
 (6, 2, 5, 'Now I am able to do a kickflip!'),

@@ -34,7 +34,6 @@ func (app *application) getReports(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) addReport(w http.ResponseWriter, r *http.Request) {
 	var input struct {
-		ReportedUserID  int32               `json:"reportedUserId"`
 		ReportedOfferID int32               `json:"reportedOfferId"`
 		Reason          string              `json:"reason"`
 		Description     string              `json:"description"`
@@ -56,7 +55,6 @@ func (app *application) addReport(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	input.Validator.Check(input.ReportedUserID != 0 || input.ReportedOfferID != 0, "Report must contain either reported user or reported offer")
 	input.Validator.CheckField(input.Reason != "", "reason", "Reason is required")
 	input.Validator.CheckField(input.Description != "", "description", "Description is required")
 	input.Validator.CheckField(input.Status != "", "status", "Status is required")
@@ -77,12 +75,7 @@ func (app *application) addReport(w http.ResponseWriter, r *http.Request) {
 		app.errorMessage(w, r, http.StatusUnprocessableEntity, "Report reason does not exist", nil)
 	}
 
-	reportedUser := pgtype.Int4{Int32: input.ReportedUserID, Valid: false}
 	reportedOffer := pgtype.Int4{Int32: input.ReportedOfferID, Valid: false}
-
-	if input.ReportedUserID != 0 {
-		reportedUser.Valid = true
-	}
 
 	if input.ReportedOfferID != 0 {
 		reportedOffer.Valid = true
@@ -93,7 +86,6 @@ func (app *application) addReport(w http.ResponseWriter, r *http.Request) {
 		Description:     input.Description,
 		Reason:          input.Reason,
 		Status:          input.Status,
-		ReportedUserID:  reportedUser,
 		ReportedOfferID: reportedOffer,
 	}
 
