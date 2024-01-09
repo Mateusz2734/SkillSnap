@@ -107,6 +107,9 @@ export function useDeleteOffer(offerId: number) {
       queryClient.invalidateQueries({
         queryKey: [`offers-user:${user?.userId}`],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["stats"],
+      });
     },
   });
 }
@@ -139,6 +142,9 @@ export function usePostOffer() {
       });
       queryClient.invalidateQueries({
         queryKey: [`offers-user:${user?.userId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["stats"],
       });
     },
   });

@@ -178,3 +178,5 @@ export type PostReviewPayload = {
 };
 
 export type DeleteReviewResponse = Status;
+
+export type DeleteReportResponse = Status;
