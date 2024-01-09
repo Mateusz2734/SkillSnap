@@ -1,6 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-
+import { useNavigate } from "react-router-dom";
 import {
   Avatar,
   Box,
@@ -10,13 +8,16 @@ import {
   Button,
   MenuItem,
   Divider,
+  Link,
 } from "@mui/joy";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowRightFromBracket,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import { ColorSchemeToggle } from "./ColorToggle";
+import { useAuth } from "../hooks/useAuth";
 import Logo from "../assets/logo.svg";
 
 const Header = () => {
@@ -45,7 +46,7 @@ const Header = () => {
 
   return (
     <div className="header">
-      <Link to="/" style={{ margin: "0em 1em" }}>
+      <Link underline="none" href="/">
         <img src={Logo} alt="SkillShare Logo" width={70} />
       </Link>
       <Box
@@ -57,10 +58,10 @@ const Header = () => {
           alignItems: "center",
         }}
       >
-        <Link style={{ fontWeight: 900 }} to="/offers">
+        <Link underline="none" href="/offers">
           Offers
         </Link>
-        {user?.role === "admin" && <Link to="/admin">Dashboard</Link>}
+        {user?.role === "admin" && <Link underline="none" href="/admin">Dashboard</Link>}
       </Box>
       <Box
         sx={{
@@ -71,6 +72,7 @@ const Header = () => {
           alignItems: "center",
         }}
       >
+        <ColorSchemeToggle />
         {user ? (
           <Dropdown>
             <MenuButton sx={{ padding: 0, border: "none" }}>
