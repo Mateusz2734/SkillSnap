@@ -38,7 +38,7 @@ export function useGetUserOffers(userId: number) {
   const config = { headers: { Authorization: `Bearer ${token}` } };
 
   return useQuery<GetOffersResponse, ApiError>({
-    queryKey: ["offers"],
+    queryKey: [`offers-user:${userId}`],
     queryFn: async () => {
       try {
         const { data } = await api.get<GetOffersResponse>(
@@ -61,7 +61,7 @@ export function useGetOffer(offerId: number) {
   const config = { headers: { Authorization: `Bearer ${token}` } };
 
   return useQuery<GetOfferResponse, ApiError>({
-    queryKey: ["offers"],
+    queryKey: [`offer:${offerId}`],
     queryFn: async () => {
       try {
         const { data } = await api.get<GetOfferResponse>(
@@ -79,15 +79,16 @@ export function useGetOffer(offerId: number) {
 }
 
 export function useDeleteOffer(offerId: number) {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const queryClient = useQueryClient();
 
   const config = { headers: { Authorization: `Bearer ${token}` } };
 
   return useMutation<DeleteOfferResponse, ApiError>({
-    mutationKey: ["offers"],
+    mutationKey: ["offers", `offers-user:${user?.userId}`],
     mutationFn: async () => {
       try {
+        console.log(user?.userId);
         const { data } = await api.delete<DeleteOfferResponse>(
           `/offers/${offerId}`,
           config
@@ -100,19 +101,25 @@ export function useDeleteOffer(offerId: number) {
     },
     throwOnError: false,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["offers"] });
+      queryClient.invalidateQueries({
+        queryKey: ["offers"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`offers-user:${user?.userId}`],
+      });
     },
   });
 }
 
-export function usePostOffer(payload: PostOfferPayload) {
-  const { token } = useAuth();
+export function usePostOffer() {
+  const { token, user } = useAuth();
+  const queryClient = useQueryClient();
 
   const config = { headers: { Authorization: `Bearer ${token}` } };
 
-  return useMutation<PostOfferResponse, ApiError>({
-    mutationKey: ["offers"],
-    mutationFn: async () => {
+  return useMutation<PostOfferResponse, ApiError, PostOfferPayload>({
+    mutationKey: ["offers", `offers-user:${user?.userId}`],
+    mutationFn: async (payload: PostOfferPayload) => {
       try {
         const { data } = await api.post<PostOfferResponse>(
           "/offers",
@@ -126,5 +133,13 @@ export function usePostOffer(payload: PostOfferPayload) {
       }
     },
     throwOnError: false,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["offers"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`offers-user:${user?.userId}`],
+      });
+    },
   });
 }
