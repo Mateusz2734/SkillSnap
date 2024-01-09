@@ -45,6 +45,7 @@ func (app *application) routes() http.Handler {
 		mux.HandleFunc("/skills", app.addSkill, "POST")
 		mux.HandleFunc("/categories", app.addCategory, "POST")
 		mux.HandleFunc("/admin/reports", app.getReports, "GET")
+		mux.HandleFunc("/admin/reports/:reportId", app.deleteReport, "DELETE")
 		mux.HandleFunc("/admin/users", app.getUsers, "GET")
 		mux.HandleFunc("/admin/stats/general", app.getGeneralStats, "GET")
 		mux.HandleFunc("/admin/stats/users/:userID", app.getUserStats, "GET")
