@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 
 import {
@@ -32,14 +32,15 @@ export function useGetReports() {
   });
 }
 
-export function usePostReport(payload: PostReportPayload) {
+export function usePostReport() {
   const { token } = useAuth();
+  const queryClient = useQueryClient();
 
   const config = { headers: { Authorization: `Bearer ${token}` } };
 
-  return useMutation<PostReportResponse, ApiError>({
+  return useMutation<PostReportResponse, ApiError, PostReportPayload>({
     mutationKey: ["reports"],
-    mutationFn: async () => {
+    mutationFn: async (payload: PostReportPayload) => {
       try {
         const { data } = await api.post<PostReportResponse>(
           "/reports",
@@ -53,5 +54,10 @@ export function usePostReport(payload: PostReportPayload) {
       }
     },
     throwOnError: false,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["reports"],
+      });
+    },
   });
 }
