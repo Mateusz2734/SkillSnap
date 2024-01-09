@@ -13,6 +13,7 @@ import (
 	"github.com/Mateusz2734/wdai-project/backend/internal/request"
 	"github.com/Mateusz2734/wdai-project/backend/internal/version"
 
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/lmittmann/tint"
 )
 
@@ -47,7 +48,7 @@ type config struct {
 
 type application struct {
 	config    config
-	db        *db.DB
+	db        *db.Queries
 	logger    *slog.Logger
 	wg        sync.WaitGroup
 	blacklist request.TokenBlacklist
@@ -73,11 +74,14 @@ func run(logger *slog.Logger) error {
 		return nil
 	}
 
-	db, err := db.NewDB(cfg.db.dsn)
+	pool, err := pgxpool.New(context.Background(), cfg.db.dsn)
 	if err != nil {
-		return err
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
 	}
-	defer db.Close(context.Background())
+	defer pool.Close()
+
+	db := db.New(pool)
 
 	blacklist := request.NewTokenBlacklist()
 

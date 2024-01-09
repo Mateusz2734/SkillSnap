@@ -17,7 +17,6 @@ func (app *application) routes() http.Handler {
 	mux.Use(app.recoverPanic)
 	mux.Use(app.authenticate)
 
-	mux.HandleFunc("/health", app.status, "GET")
 	mux.HandleFunc("/users", app.createUser, "POST")
 	mux.HandleFunc("/auth/login", app.createAuthenticationToken, "POST")
 

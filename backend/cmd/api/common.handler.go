@@ -15,26 +15,6 @@ import (
 	"github.com/pascaldekloe/jwt"
 )
 
-func (app *application) status(w http.ResponseWriter, r *http.Request) {
-	err := app.db.Ping(r.Context())
-
-	data := map[string]string{
-		"status": "success",
-	}
-	status := http.StatusOK
-
-	if err != nil {
-		data["status"] = "failed"
-		status = http.StatusServiceUnavailable
-	}
-
-	err = response.JSON(w, status, data)
-
-	if err != nil {
-		app.serverError(w, r, err)
-	}
-}
-
 func (app *application) createAuthenticationToken(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Username  string              `json:"Username"`
