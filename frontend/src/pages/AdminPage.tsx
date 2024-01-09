@@ -11,8 +11,6 @@ const Admin = () => {
 
   return (
     <>
-      <h1>Admin Dashboard</h1>
-
       {data?.userCount && (
         <DataCard label="User Count" value={data?.userCount} icon={faUser} />
       )}

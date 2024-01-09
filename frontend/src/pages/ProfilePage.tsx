@@ -8,8 +8,6 @@ const Profile = () => {
 
   return (
     <div>
-      <h1>Profile</h1>
-      <h2>My Offers</h2>
       {data?.offers?.map((offer) => (
         <OfferCard key={offer.offerId} offer={offer} editable />
       ))}
