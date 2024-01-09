@@ -79,7 +79,7 @@ const Header = () => {
                 src={`${apiUrl}?seed=${user.userId}`}
               />
             </MenuButton>
-            <Menu variant="solid" color="primary">
+            <Menu variant="solid" color="primary" size="sm">
               <MenuItem onClick={handleProfile}>
                 <FontAwesomeIcon icon={faUser} />
                 Profile
