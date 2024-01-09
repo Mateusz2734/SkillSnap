@@ -4,14 +4,13 @@ import { useTheme } from "@mui/joy";
 
 import { PostOfferPayload } from "../types/types";
 import { skills } from "../data/skills";
+import { usePostOffer } from "../api/offers";
 
 type FormValues = PostOfferPayload;
 
 export const OfferForm = () => {
+  const { mutate } = usePostOffer();
   const theme = useTheme();
-  const handleSelectChange = (_: unknown, value: string | null) => {
-    formik.setFieldValue("skill", value || "");
-  };
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -19,7 +18,7 @@ export const OfferForm = () => {
       description: "",
     },
     onSubmit: (values) => {
-      console.log(values);
+      mutate(values);
     },
     validate(values) {
       const errors: Partial<FormValues> = {};
@@ -47,7 +46,9 @@ export const OfferForm = () => {
         id="skill"
         name="skill"
         placeholder="Select a skill (required)"
-        onChange={handleSelectChange}
+        onChange={(_: unknown, value: string | null) =>
+          formik.setFieldValue("skill", value || "")
+        }
         onBlur={formik.handleBlur}
         value={formik.values.skill}
       >

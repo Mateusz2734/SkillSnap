@@ -3,6 +3,7 @@ import {
   CardOverflow,
   AspectRatio,
   Button,
+  IconButton,
   Card,
   CardActions,
   CardContent,
@@ -10,7 +11,11 @@ import {
 import { Offer } from "../types/types";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faPenToSquare,
+  faEllipsisVertical,
+} from "@fortawesome/free-solid-svg-icons";
 import { useDeleteOffer } from "../api/offers";
 import { SxProps } from "@mui/joy/styles/types";
 
@@ -56,6 +61,14 @@ export const OfferCard = (props: CongratCardProps) => {
 
   const overflow = !props.editable ? (
     <CardOverflow variant="solid" color="primary">
+      <IconButton
+        sx={{ position: "absolute", right: 0, top: 0 }}
+        variant="plain"
+        color="neutral"
+        // style={{ paddingTop: 10, transform: "translateX(50%)" }}
+      >
+        <FontAwesomeIcon icon={faEllipsisVertical} />
+      </IconButton>
       <AspectRatio
         variant="outlined"
         color="primary"
