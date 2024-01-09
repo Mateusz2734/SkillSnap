@@ -63,8 +63,6 @@ ALTER TABLE "offers" ADD FOREIGN KEY ("skill") REFERENCES "skills" ("skill");
 
 ALTER TABLE "reports" ADD FOREIGN KEY ("reporting_user_id") REFERENCES "users" ("user_id");
 
-ALTER TABLE "reports" ADD FOREIGN KEY ("reported_user_id") REFERENCES "users" ("user_id");
-
 ALTER TABLE "reports" ADD FOREIGN KEY ("reported_offer_id") REFERENCES "offers" ("offer_id");
 
 ALTER TABLE "reports" ADD FOREIGN KEY ("reason") REFERENCES "report_reasons" ("reason");

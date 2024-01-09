@@ -5,13 +5,6 @@ FROM offers
 WHERE
     user_id = $1;
 
--- name: GetReportCountByUser :one
-SELECT
-    COALESCE(COUNT(*), 0) AS count
-FROM reports
-WHERE
-    reported_user_id = $1;
-
 -- name: GetReviewCountByUser :one
 SELECT
     COALESCE(COUNT(*), 0) AS count

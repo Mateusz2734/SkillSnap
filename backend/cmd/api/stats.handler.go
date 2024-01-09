@@ -7,7 +7,6 @@ import (
 	"github.com/Mateusz2734/wdai-project/backend/internal/response"
 	"github.com/Mateusz2734/wdai-project/backend/internal/validator"
 	"github.com/alexedwards/flow"
-	"github.com/jackc/pgx/v5/pgtype"
 )
 
 func (app *application) getGeneralStats(w http.ResponseWriter, r *http.Request) {
@@ -95,13 +94,6 @@ func (app *application) getUserStats(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	reportCount, err := app.db.GetReportCountByUser(r.Context(), pgtype.Int4{Int32: userID32, Valid: true})
-
-	if err != nil {
-		app.serverError(w, r, err)
-		return
-	}
-
 	reviewCount, err := app.db.GetReviewCountByUser(r.Context(), userID32)
 
 	if err != nil {
@@ -117,7 +109,6 @@ func (app *application) getUserStats(w http.ResponseWriter, r *http.Request) {
 
 	data := map[string]interface{}{
 		"userId":       userID32,
-		"reportCount":  reportCount,
 		"offerCount":   offerCount,
 		"reviewCount":  reviewCount,
 		"averageStars": averageStars,

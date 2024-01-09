@@ -143,7 +143,6 @@ export type GetGeneralStatsResponse = Status & {
 
 export type GetUserStatsResponse = Status & {
   userId: number;
-  reportCount: number;
   reviewCount: number;
   offerCount: number;
   averageStars: number;
