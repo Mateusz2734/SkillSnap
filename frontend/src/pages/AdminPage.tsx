@@ -1,10 +1,13 @@
 import { faUser, faEnvelope } from "@fortawesome/free-solid-svg-icons";
 
 import { useGetGeneralStats } from "../api/stats";
+import { useGetReports } from "../api/report";
 import { DataCard } from "../components/DataCard";
+import { ReportTable } from "../components/ReportTable";
 
 const Admin = () => {
   const { data } = useGetGeneralStats();
+  const { data: reports } = useGetReports();
 
   return (
     <>
@@ -21,6 +24,8 @@ const Admin = () => {
           icon={faEnvelope}
         />
       )}
+      <br />
+      {reports && <ReportTable reports={reports.reports} />}
     </>
   );
 };
