@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import {
   Typography,
   CardOverflow,
@@ -13,8 +13,11 @@ import {
   MenuItem,
   IconButton,
   ListItemDecorator,
+  Modal,
+  ModalDialog,
+  DialogTitle,
+  DialogContent,
 } from "@mui/joy";
-import { Offer } from "../types/types";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -23,9 +26,12 @@ import {
   faEllipsisVertical,
   faFlag,
 } from "@fortawesome/free-solid-svg-icons";
-import { useDeleteOffer } from "../api/offers";
 import { SxProps } from "@mui/joy/styles/types";
+
+import { Offer } from "../types/types";
 import { useAuth } from "../hooks/useAuth";
+import { useDeleteOffer } from "../api/offers";
+import { ReportForm } from "./ReportForm";
 
 export type OfferCardProps = {
   offer: Offer;
@@ -35,7 +41,7 @@ export type OfferCardProps = {
 export const OfferCard = (props: OfferCardProps) => {
   const { user } = useAuth();
   const { mutate } = useDeleteOffer(props.offer.offerId);
-  const navigate = useNavigate();
+  const [open, setOpen] = useState<boolean>(false);
 
   const buttonSection = props.editable ? (
     <>
@@ -81,9 +87,7 @@ export const OfferCard = (props: OfferCardProps) => {
       </MenuButton>
       <Menu size="sm">
         {user?.userId !== props.offer.userId && (
-          <MenuItem
-            onClick={() => navigate(`/report?offerId=${props.offer.offerId}`)}
-          >
+          <MenuItem onClick={() => setOpen(true)}>
             <ListItemDecorator>
               <FontAwesomeIcon icon={faFlag} />
             </ListItemDecorator>
@@ -133,26 +137,39 @@ export const OfferCard = (props: OfferCardProps) => {
 
   const buttonOrientation = !props.editable ? "vertical" : "horizontal";
 
+  const reportModal = (
+    <Modal open={open} onClose={() => setOpen(false)}>
+      <ModalDialog>
+        <DialogTitle>Create new report</DialogTitle>
+        <DialogContent>Fill in the information of the report.</DialogContent>
+        <ReportForm offerId={props.offer.offerId} />
+      </ModalDialog>
+    </Modal>
+  );
+
   return (
-    <Card data-resizable sx={cardSXProps}>
-      {overflow}
-      <Typography level="title-lg" sx={{ mt: "calc(var(--icon-size) / 2)" }}>
-        {props.offer.skill}
-      </Typography>
-      <CardContent sx={{ maxWidth: "40ch" }}>
-        {props.offer.description}
-      </CardContent>
-      <CardActions
-        orientation={buttonOrientation}
-        buttonFlex={1}
-        sx={{
-          "--Button-radius": "40px",
-          width: "clamp(min(100%, 200px), 50%, min(100%, 200px))",
-        }}
-      >
-        {buttonSection}
-      </CardActions>
-    </Card>
+    <>
+      {reportModal}
+      <Card data-resizable sx={cardSXProps}>
+        {overflow}
+        <Typography level="title-lg" sx={{ mt: "calc(var(--icon-size) / 2)" }}>
+          {props.offer.skill}
+        </Typography>
+        <CardContent sx={{ maxWidth: "40ch" }}>
+          {props.offer.description}
+        </CardContent>
+        <CardActions
+          orientation={buttonOrientation}
+          buttonFlex={1}
+          sx={{
+            "--Button-radius": "40px",
+            width: "clamp(min(100%, 200px), 50%, min(100%, 200px))",
+          }}
+        >
+          {buttonSection}
+        </CardActions>
+      </Card>
+    </>
   );
 };
 
