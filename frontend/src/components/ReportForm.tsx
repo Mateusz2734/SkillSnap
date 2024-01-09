@@ -82,7 +82,7 @@ export const ReportForm = (props: ReportFormProps) => {
         onBlur={formik.handleBlur}
         value={formik.values.description}
       />
-      <Button type="submit">Submit</Button>
+      <Button type="submit" fullWidth>Submit</Button>
     </form>
   );
 };
