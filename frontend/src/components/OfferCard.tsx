@@ -1,12 +1,17 @@
+import { useNavigate } from "react-router-dom";
 import {
   Typography,
   CardOverflow,
   AspectRatio,
   Button,
-  IconButton,
   Card,
   CardActions,
   CardContent,
+  MenuButton,
+  Dropdown,
+  Menu,
+  MenuItem,
+  IconButton
 } from "@mui/joy";
 import { Offer } from "../types/types";
 import { Link } from "react-router-dom";
@@ -19,13 +24,14 @@ import {
 import { useDeleteOffer } from "../api/offers";
 import { SxProps } from "@mui/joy/styles/types";
 
-export type CongratCardProps = {
+export type OfferCardProps = {
   offer: Offer;
   editable?: boolean;
 };
 
-export const OfferCard = (props: CongratCardProps) => {
+export const OfferCard = (props: OfferCardProps) => {
   const { mutate } = useDeleteOffer(props.offer.offerId);
+  const navigate = useNavigate();
 
   const buttonSection = props.editable ? (
     <>
@@ -46,29 +52,38 @@ export const OfferCard = (props: CongratCardProps) => {
 
   const cardSXProps: SxProps = !props.editable
     ? {
-        textAlign: "center",
-        alignItems: "center",
-        width: 343,
-        marginBottom: "1em",
-        "--icon-size": "100px",
-      }
+      textAlign: "center",
+      alignItems: "center",
+      width: 343,
+      marginBottom: "1em",
+      "--icon-size": "100px",
+    }
     : {
-        textAlign: "center",
-        alignItems: "center",
-        width: 343,
-        marginBottom: "1em",
-      };
+      textAlign: "center",
+      alignItems: "center",
+      width: 343,
+      marginBottom: "1em",
+    };
+
+  const reportDropdown = (
+    <Dropdown>
+      <MenuButton
+        sx={{ position: "absolute", right: 0, top: 0 }}
+        slots={{ root: IconButton }}
+        slotProps={{ root: { variant: "plain", color: 'neutral' } }}
+        size="sm"
+      >
+        <FontAwesomeIcon icon={faEllipsisVertical} />
+      </MenuButton>
+      <Menu size="sm">
+        <MenuItem onClick={() => navigate(`/report?offerId=${props.offer.offerId}`)}>Report offer</MenuItem>
+      </Menu>
+    </Dropdown>
+  );
 
   const overflow = !props.editable ? (
     <CardOverflow variant="solid" color="primary">
-      <IconButton
-        sx={{ position: "absolute", right: 0, top: 0 }}
-        variant="plain"
-        color="neutral"
-        // style={{ paddingTop: 10, transform: "translateX(50%)" }}
-      >
-        <FontAwesomeIcon icon={faEllipsisVertical} />
-      </IconButton>
+      {reportDropdown}
       <AspectRatio
         variant="outlined"
         color="primary"
