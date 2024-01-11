@@ -1,4 +1,4 @@
-import { faUser, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faTags } from "@fortawesome/free-solid-svg-icons";
 
 import { useGetGeneralStats } from "../api/stats";
 import { useGetReports } from "../api/report";
@@ -16,11 +16,7 @@ const Admin = () => {
       )}
       <br />
       {data?.offerCount && (
-        <DataCard
-          label="Offer Count"
-          value={data?.offerCount}
-          icon={faEnvelope}
-        />
+        <DataCard label="Offer Count" value={data?.offerCount} icon={faTags} />
       )}
       <br />
       {reports && <ReportTable reports={reports.reports} />}

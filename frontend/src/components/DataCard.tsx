@@ -10,9 +10,6 @@ import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export type DataCardProps = {
-  variant?: "solid" | "outlined" | "plain" | "soft";
-  color?: "primary" | "danger" | "success" | "warning" | "neutral";
-  progress?: number;
   label: string;
   value: number;
   icon: IconDefinition;
@@ -21,23 +18,34 @@ export type DataCardProps = {
 export const DataCard = (props: DataCardProps) => {
   return (
     <Card
-      variant={props.variant ? props.variant : "solid"}
-      color={props.color ? props.color : "primary"}
-      invertedColors
+      sx={{
+        backgroundColor: "var(--joy-palette-background-level1)",
+      }}
     >
       <CardContent orientation="horizontal">
-        <CircularProgress
-          size="lg"
-          determinate
-          value={props.progress ? props.progress : 0}
-        >
-          <SvgIcon>
+        <CircularProgress determinate size="lg">
+          <SvgIcon
+            sx={{
+              color: "var(--joy-palette-text-icon)",
+              backgroundColor: "var(--joy-palette-background-level1)",
+            }}
+          >
             <FontAwesomeIcon icon={props.icon} />
           </SvgIcon>
         </CircularProgress>
         <CardContent>
-          <Typography level="body-md">{props.label}</Typography>
-          <Typography level="h2">{props.value}</Typography>
+          <Typography
+            level="body-md"
+            sx={{ color: "var(--joy-palette-text-primary)" }}
+          >
+            {props.label}
+          </Typography>
+          <Typography
+            level="h2"
+            sx={{ color: "var(--joy-palette-text-primary)" }}
+          >
+            {props.value}
+          </Typography>
         </CardContent>
       </CardContent>
     </Card>
