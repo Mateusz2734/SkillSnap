@@ -20,6 +20,7 @@ export const DataCard = (props: DataCardProps) => {
     <Card
       sx={{
         backgroundColor: "var(--joy-palette-background-level1)",
+        maxWidth: "300px",
       }}
     >
       <CardContent orientation="horizontal">

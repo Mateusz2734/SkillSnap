@@ -5,6 +5,7 @@ import {
   ModalDialog,
   DialogTitle,
   DialogContent,
+  Grid
 } from "@mui/joy";
 
 import { useGetOffers } from "../api/offers";
@@ -48,9 +49,14 @@ const Offers = () => {
         </ModalDialog>
       </Modal>
 
-      {data?.offers.map((offer) => (
-        <OfferCard key={offer.offerId} offer={offer} />
-      ))}
+      <Grid container spacing={4} >
+        {data?.offers.map((offer) => (
+          <Grid key={offer.offerId} sx={{ flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center" }} >
+            <OfferCard offer={offer} />
+          </Grid>
+
+        ))}
+      </Grid>
     </>
   );
 };

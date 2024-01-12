@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { DeleteOutlined, OutlinedFlag, MoreVert, EditOutlined } from "@mui/icons-material";
 import {
   Typography,
   CardOverflow,
@@ -19,13 +20,6 @@ import {
   DialogContent,
 } from "@mui/joy";
 import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTrash,
-  faPenToSquare,
-  faEllipsisVertical,
-  faFlag,
-} from "@fortawesome/free-solid-svg-icons";
 import { SxProps } from "@mui/joy/styles/types";
 
 import { Offer } from "../types/types";
@@ -45,12 +39,12 @@ export const OfferCard = (props: OfferCardProps) => {
 
   const buttonSection = props.editable ? (
     <>
-      <Button variant="solid" color="danger" onClick={() => mutate()}>
-        <FontAwesomeIcon icon={faTrash} />
-      </Button>
-      <Button variant="solid" color="primary">
-        <FontAwesomeIcon icon={faPenToSquare} />
-      </Button>
+      <IconButton variant="plain" color="danger" onClick={() => mutate()}>
+        <DeleteOutlined />
+      </IconButton>
+      <IconButton variant="plain" >
+        <EditOutlined />
+      </IconButton>
     </>
   ) : (
     <Link to={`/offers/${props.offer.offerId}`}>
@@ -62,18 +56,18 @@ export const OfferCard = (props: OfferCardProps) => {
 
   const cardSXProps: SxProps = !props.editable
     ? {
-        textAlign: "center",
-        alignItems: "center",
-        width: 343,
-        marginBottom: "1em",
-        "--icon-size": "100px",
-      }
+      textAlign: "center",
+      alignItems: "center",
+      width: 343,
+      marginBottom: "1em",
+      "--icon-size": "100px",
+    }
     : {
-        textAlign: "center",
-        alignItems: "center",
-        width: 343,
-        marginBottom: "1em",
-      };
+      textAlign: "center",
+      alignItems: "center",
+      width: 343,
+      marginBottom: "1em",
+    };
 
   const reportDropdown = (
     <Dropdown>
@@ -83,22 +77,22 @@ export const OfferCard = (props: OfferCardProps) => {
         slotProps={{ root: { variant: "plain", color: "neutral" } }}
         size="sm"
       >
-        <FontAwesomeIcon icon={faEllipsisVertical} />
+        <MoreVert sx={{ color: "var(--joy-palette-background-level1)" }} />
       </MenuButton>
       <Menu size="sm">
         {user?.userId !== props.offer.userId && (
           <MenuItem onClick={() => setOpen(true)}>
             <ListItemDecorator>
-              <FontAwesomeIcon icon={faFlag} />
+              <OutlinedFlag />
             </ListItemDecorator>
             Report offer
           </MenuItem>
         )}
 
         {(user?.role === "admin" || props.offer.userId === user?.userId) && (
-          <MenuItem onClick={() => mutate()}>
+          <MenuItem onClick={() => mutate()} color="danger">
             <ListItemDecorator>
-              <FontAwesomeIcon icon={faTrash} color="red" />
+              <DeleteOutlined />
             </ListItemDecorator>
             Delete offer
           </MenuItem>
@@ -163,7 +157,7 @@ export const OfferCard = (props: OfferCardProps) => {
           buttonFlex={1}
           sx={{
             "--Button-radius": "40px",
-            width: "clamp(min(100%, 200px), 50%, min(100%, 200px))",
+            // width: "clamp(min(100%, 200px), 50%, min(100%, 200px))",
           }}
         >
           {buttonSection}

@@ -8,14 +8,13 @@ const Layout = () => {
   return (
     <>
       <Header />
-      <main className="App">
+      <main>
         <Outlet />
       </main>
       <ToastContainer
         position="bottom-right"
         autoClose={5000}
         newestOnTop={false}
-        pauseOnFocusLoss
         draggable
         pauseOnHover={false}
         theme="colored"
