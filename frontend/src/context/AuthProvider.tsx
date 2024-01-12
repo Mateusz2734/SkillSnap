@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { ReactNode, createContext } from "react";
 import { useSessionStorage } from "@uidotdev/usehooks";
 import { toast } from "react-toastify";
 
@@ -20,7 +20,7 @@ export type AuthContextType = {
 };
 
 type Props = {
-  children: string | JSX.Element | JSX.Element[];
+  children: ReactNode;
 };
 
 export const AuthProvider = ({ children }: Props) => {
