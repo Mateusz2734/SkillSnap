@@ -1,11 +1,11 @@
 const Public = () => {
   return (
     <>
-      <h1>🚀 Unlock Your Potential with SkillShare! 🌟</h1>
+      <h1>🚀 Unlock Your Potential with SkillSnap! 🌟</h1>
 
       <p>
         Ready to level up your skills and unleash your true potential? Look no
-        further than SkillShare – your ultimate platform for learning and
+        further than SkillSnap – your ultimate platform for learning and
         growing.
       </p>
 
@@ -28,14 +28,14 @@ const Public = () => {
 
       <p>
         Whether you're a coding maestro, design virtuoso, or business guru,
-        SkillShare offers a diverse range of courses tailored to your unique
+        SkillSnap offers a diverse range of courses tailored to your unique
         passions and career goals.
       </p>
 
       <h1>🚀 Stay Ahead of the Curve:</h1>
 
       <p>
-        In a rapidly evolving world, staying ahead is key. SkillShare empowers
+        In a rapidly evolving world, staying ahead is key. SkillSnap empowers
         you to adapt and thrive, offering the latest in-demand skills to keep
         you at the forefront of your industry.
       </p>
@@ -43,17 +43,17 @@ const Public = () => {
       <h1>🔥 Unlock a World of Opportunities:</h1>
 
       <p>
-        Skills are the currency of the future. With SkillShare, you're not just
+        Skills are the currency of the future. With SkillSnap, you're not just
         learning – you're investing in yourself and unlocking a world of
         exciting opportunities.
       </p>
 
       <p>
-        Ready to embark on your learning journey? Join SkillShare today and
-        start turning your dreams into skills that propel you forward!
+        Ready to embark on your learning journey? Join SkillSnap today and start
+        turning your dreams into skills that propel you forward!
       </p>
 
-      <h1>🌈 SkillShare: Where Skills Meet Success! 🌟</h1>
+      <h1>🌈 SkillSnap: Where Skills Meet Success! 🌟</h1>
     </>
   );
 };

@@ -47,7 +47,7 @@ const Header = () => {
   return (
     <div className="header">
       <Link underline="none" href="/">
-        <img src={Logo} alt="SkillShare Logo" width={70} />
+        <img src={Logo} alt="SkillSnap Logo" width={70} />
       </Link>
       <Box
         sx={{
@@ -61,7 +61,11 @@ const Header = () => {
         <Link underline="none" href="/offers">
           Offers
         </Link>
-        {user?.role === "admin" && <Link underline="none" href="/admin">Dashboard</Link>}
+        {user?.role === "admin" && (
+          <Link underline="none" href="/admin">
+            Dashboard
+          </Link>
+        )}
       </Box>
       <Box
         sx={{
