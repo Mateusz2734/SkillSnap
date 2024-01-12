@@ -91,3 +91,26 @@ export function useDeleteReport() {
     },
   });
 }
+
+export function useUpdateStatus() {
+  const { token } = useAuth();
+
+  const config = { headers: { Authorization: `Bearer ${token}` } };
+
+  return useMutation<DeleteReportResponse, ApiError, number>({
+    mutationKey: ["reports"],
+    mutationFn: async (reportId: number) => {
+      try {
+        const { data } = await api.patch<DeleteReportResponse>(
+          `/admin/reports/${reportId}`,
+          config
+        );
+        return data;
+      } catch (error) {
+        const e = error as AxiosError<ApiError>;
+        return Promise.reject(e.response?.data);
+      }
+    },
+    throwOnError: false,
+  });
+}

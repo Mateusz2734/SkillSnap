@@ -1,23 +1,29 @@
-import { ColorPaletteProp } from '@mui/joy/styles';
-import Chip from '@mui/joy/Chip';
-import Table from '@mui/joy/Table';
-import Sheet from '@mui/joy/Sheet';
-import Typography from '@mui/joy/Typography';
+import { useState } from "react";
+import { ColorPaletteProp } from "@mui/joy/styles";
+import { IconButton, Link, Chip, Table, Sheet, Typography } from "@mui/joy";
+import { CheckRounded, AutorenewRounded, DeleteOutlined } from "@mui/icons-material";
 
-import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
-import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
+import { Report } from "../types/types";
 
-import { Report } from '../types/types';
-import { Link } from '@mui/joy';
+type ReportTableProps = {
+  reports: Report[];
+};
 
-export const ReportTable = (props: { reports: Report[]; }) =>
+type Status = "Resolved" | "Pending";
+
+type StatusChipProps = {
+  status: string;
+  updateStatus: (newState: Status) => void;
+};
+
+export const ReportTable = (props: ReportTableProps) =>
 (
   <Sheet
     variant="outlined"
     sx={{
-      width: '80%',
-      borderRadius: 'sm',
-      overflow: 'auto',
+      width: "80%",
+      borderRadius: "md",
+      overflow: "auto",
       minHeight: 0,
     }}
   >
@@ -25,72 +31,117 @@ export const ReportTable = (props: { reports: Report[]; }) =>
       stickyHeader
       hoverRow
       sx={{
-        '--TableCell-headBackground': 'var(--joy-palette-background-level1)',
-        '--Table-headerUnderlineThickness': '1px',
-        '--TableRow-hoverBackground': 'var(--joy-palette-background-level1)',
-        '--TableCell-paddingY': '4px',
-        '--TableCell-paddingX': '8px',
+        "--TableCell-headBackground": "var(--joy-palette-background-level1)",
+        "--Table-headerUnderlineThickness": "1px",
+        "--TableRow-hoverBackground": "var(--joy-palette-background-level1)",
+        "--TableCell-paddingY": "8px",
+        "--TableCell-paddingX": "8px",
       }}
     >
       <thead>
-        <tr>
-          <th style={{ textAlign: 'center' }}>Date</th>
-          <th style={{ textAlign: 'center' }}>
-            Reason
+        <tr >
+          <th style={{ textAlign: "center" }}>
+            <Typography level="title-lg">
+              Status
+            </Typography>
           </th>
-          <th style={{ textAlign: 'center' }}>Status</th>
-          <th style={{ textAlign: 'center' }}>Description</th>
-          <th style={{ textAlign: 'center' }}>Link</th>
+          <th style={{ textAlign: "center" }}>
+            <Typography level="title-lg">
+              Date
+            </Typography>
+          </th>
+          <th style={{ textAlign: "center" }}>
+            <Typography level="title-lg">
+              Reason
+            </Typography>
+          </th>
+          <th style={{ textAlign: "center" }}>
+            <Typography level="title-lg">
+              Description
+            </Typography>
+          </th>
+          <th style={{ textAlign: "center" }}>
+            <Typography level="title-lg">
+              Link
+            </Typography>
+          </th>
+          <th style={{ textAlign: "center", width: "80px" }}>
+            <Typography level="title-lg">
+              Actions
+            </Typography>
+          </th>
         </tr>
       </thead>
       <tbody>
         {props.reports.map((report) => (
-          <tr key={report.reportId}>
-            <td>
-              <Typography level="body-xs">{new Date(report.createdAt).toLocaleString()}</Typography>
-            </td>
-            <td>
-              <Typography>
-                <Chip
-                  size="sm"
-                  color="danger"
-                >
-                  {report.reason}
-                </Chip>
-              </Typography>
-            </td>
-            <td>
-              <Chip
-                variant="soft"
-                size="sm"
-                startDecorator={
-                  {
-                    Resolved: <CheckRoundedIcon />,
-                    Pending: <AutorenewRoundedIcon />,
-                  }[report.status]
-                }
-                color={
-                  {
-                    Resolved: 'success',
-                    Pending: 'warning',
-                  }[report.status] as ColorPaletteProp
-                }
-              >
-                {report.status}
-              </Chip>
-            </td>
-            <td>
-              <div>
-                <Typography level="body-xs">{report.description}</Typography>
-              </div>
-            </td>
-            <td>
-              <Link level="body-xs" href={`/offer/${report.reportedOfferId}`} >
-                Go to offer
-              </Link>
-            </td>
-          </tr>
+          <ReportRow report={report} key={report.reportId} />
         ))}
       </tbody>
     </Table>
   </Sheet>);
+
+type ReportRowProps = {
+  report: Report;
+};
+
+const ReportRow = ({ report }: ReportRowProps) => {
+  const [status, setStatus] = useState(report.status);
+
+  return (
+    <tr>
+      <td style={{ textAlign: "center" }}>
+        <StatusChip status={status} updateStatus={setStatus} />
+      </td>
+      <td style={{ textAlign: "center" }}>
+        <Typography>{new Date(report.createdAt).toLocaleString()}</Typography>
+      </td>
+      <td style={{ textAlign: "center" }}>
+        <Chip color="danger">
+          {report.reason}
+        </Chip>
+      </td>
+      <td style={{ textAlign: "center" }}>
+        <div>
+          <Typography>{report.description}</Typography>
+        </div>
+      </td>
+      <td style={{ textAlign: "center" }}>
+        <Link href={`/offer/${report.reportedOfferId}`} >
+          Go to offer
+        </Link>
+      </td>
+      <td style={{ textAlign: "center" }}>
+        <IconButton variant="plain" color="danger">
+          <DeleteOutlined />
+        </IconButton>
+      </td>
+    </tr>);
+};
+
+const StatusChip = (props: StatusChipProps) => {
+  const color = {
+    Resolved: "success",
+    Pending: "warning",
+  }[props.status] as ColorPaletteProp;
+
+  const decorator = {
+    Resolved: <CheckRounded />,
+    Pending: <AutorenewRounded />,
+  }[props.status];
+
+  return <Chip
+    variant="soft"
+    startDecorator={decorator}
+    color={color}
+    onClick={() => {
+      const newState = {
+        Resolved: "Pending",
+        Pending: "Resolved",
+      }[props.status] as Status;
+      props.updateStatus(newState);
+    }}
+  >
+    {props.status}
+  </Chip>;
+}
+
