@@ -12,11 +12,11 @@ const Admin = () => {
   return (
     <>
       {data?.userCount && (
-        <DataCard label="User Count" value={data?.userCount} icon={faUser} />
+        <DataCard label="User Count" value={data.userCount} icon={faUser} />
       )}
       <br />
       {data?.offerCount && (
-        <DataCard label="Offer Count" value={data?.offerCount} icon={faTags} />
+        <DataCard label="Offer Count" value={data.offerCount} icon={faTags} />
       )}
       <br />
       {reports && <ReportTable reports={reports.reports} />}
