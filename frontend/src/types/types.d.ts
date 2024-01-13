@@ -148,8 +148,12 @@ export type GetUserStatsResponse = Status & {
   averageStars: number;
 };
 
-export type PostUserResponse = Status & {
-  user: User;
+export type PostUserResponse = Status;
+
+export type PostUserPayload = {
+  username: string;
+  password: string;
+  discordUsername: string;
 };
 
 export type GetUsersResponse = Status & {
