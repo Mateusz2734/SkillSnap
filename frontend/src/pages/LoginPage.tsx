@@ -7,14 +7,15 @@ import { LoginForm } from "../components/LoginForm";
 
 const Login = () => {
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || "/offers";
 
   useEffect(() => {
     if (
       from !== "/" &&
       from !== "/register" &&
       from !== "/logout" &&
-      from !== "/login"
+      from !== "/login" &&
+      from !== "/offers"
     ) {
       toast.info("You must be logged in to view that page");
     }

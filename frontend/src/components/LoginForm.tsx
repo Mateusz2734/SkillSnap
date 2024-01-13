@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import { Button, FormControl, FormLabel, Input, Stack } from "@mui/joy";
+import { Button, FormControl, FormLabel, Input, Stack, IconButton } from "@mui/joy";
+import { VisibilityOutlined, VisibilityOffOutlined } from '@mui/icons-material';
 import axios from "axios";
 
 import { Credentials } from "../types/types";
@@ -15,6 +17,7 @@ type LoginFormProps = {
 
 export const LoginForm = (props: LoginFormProps) => {
   const { logIn } = useAuth();
+  const [visible, setVisible] = useState(false);
 
   const navigate = useNavigate();
 
@@ -63,6 +66,7 @@ export const LoginForm = (props: LoginFormProps) => {
 
   const usernameError = formik.touched.username && !!formik.errors.username;
   const passwordError = formik.touched.password && !!formik.errors.password;
+  const visibilityButton = <IconButton onClick={() => setVisible(!visible)}>{visible ? <VisibilityOffOutlined /> : <VisibilityOutlined />}</IconButton>;
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -85,13 +89,14 @@ export const LoginForm = (props: LoginFormProps) => {
         <Input
           id="password"
           name="password"
-          type="password"
+          type={visible ? "text" : "password"}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.password}
           autoComplete="on"
           error={passwordError}
           fullWidth
+          endDecorator={visibilityButton}
         />
       </FormControl>
       <Stack gap={4} sx={{ mt: 2 }}>
