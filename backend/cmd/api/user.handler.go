@@ -73,18 +73,14 @@ func (app *application) createUser(w http.ResponseWriter, r *http.Request) {
 		PasswordHash:    hashedPassword,
 	}
 
-	user, err := app.db.AddUser(r.Context(), newUser)
+	_, err = app.db.AddUser(r.Context(), newUser)
 
 	if err != nil {
 		app.serverError(w, r, err)
 		return
 	}
 
-	data := map[string]interface{}{
-		"user": user,
-	}
-
-	err = response.JSONSuccess(w, data)
+	err = response.JSONSuccess(w, nil)
 
 	if err != nil {
 		app.serverError(w, r, err)
