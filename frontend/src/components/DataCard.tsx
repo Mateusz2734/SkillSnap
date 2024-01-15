@@ -1,18 +1,14 @@
-import {
-  Card,
-  CardContent,
-  CircularProgress,
-  Typography,
-  SvgIcon,
-} from "@mui/joy";
-
-import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Card from "@mui/joy/Card";
+import CardContent from "@mui/joy/CardContent";
+import CircularProgress from "@mui/joy/CircularProgress";
+import Typography from "@mui/joy/Typography";
+import SvgIcon from "@mui/joy/SvgIcon";
+import { SvgIconComponent } from "@mui/icons-material";
 
 export type DataCardProps = {
   label: string;
   value: number;
-  icon: IconDefinition;
+  icon: SvgIconComponent;
 };
 
 export const DataCard = (props: DataCardProps) => {
@@ -26,12 +22,13 @@ export const DataCard = (props: DataCardProps) => {
       <CardContent orientation="horizontal">
         <CircularProgress determinate size="lg">
           <SvgIcon
+            size="lg"
             sx={{
               color: "var(--joy-palette-text-icon)",
               backgroundColor: "var(--joy-palette-background-level1)",
             }}
           >
-            <FontAwesomeIcon icon={props.icon} />
+            <props.icon />
           </SvgIcon>
         </CircularProgress>
         <CardContent>
