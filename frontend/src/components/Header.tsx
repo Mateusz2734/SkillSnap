@@ -45,10 +45,12 @@ const Header = () => {
   };
 
   return (
-    <div className="header">
-      <Link underline="none" href="/">
-        <img src={Logo} alt="SkillSnap Logo" width={70} />
-      </Link>
+    <Box className="header">
+      <Box>
+        <Link underline="none" href="/">
+          <img src={Logo} alt="SkillSnap Logo" width={70} />
+        </Link>
+      </Box>
       <Box
         sx={{
           display: "flex",
@@ -108,7 +110,7 @@ const Header = () => {
           </>
         )}
       </Box>
-    </div>
+    </Box>
   );
 };
 
