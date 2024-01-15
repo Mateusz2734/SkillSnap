@@ -1,4 +1,8 @@
-import { Box, formLabelClasses, Link, Typography, Stack } from "@mui/joy";
+import Box from "@mui/joy/Box";
+import Typography from "@mui/joy/Typography";
+import Stack from "@mui/joy/Stack";
+import Link from "@mui/joy/Link";
+import { formLabelClasses } from "@mui/joy/FormLabel";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { toast } from "react-toastify";

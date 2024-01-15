@@ -1,5 +1,6 @@
-import Carousel from "../components/Carousel";
 import Stack from "@mui/joy/Stack";
+
+import Carousel from "../components/Carousel";
 
 const Public = () => {
   const slides = [

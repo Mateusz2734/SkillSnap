@@ -1,23 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import {
-  Avatar,
-  Box,
-  Dropdown,
-  Menu,
-  MenuButton,
-  Button,
-  MenuItem,
-  Divider,
-  Link,
-} from "@mui/joy";
-import {
-  faArrowRightFromBracket,
-  faUser,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Avatar from "@mui/joy/Avatar";
+import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
+import Divider from "@mui/joy/Divider";
+import Link from "@mui/joy/Link";
+import Menu from "@mui/joy/Menu";
+import MenuItem from "@mui/joy/MenuItem";
+import Dropdown from "@mui/joy/Dropdown";
+import MenuButton from "@mui/joy/MenuButton";
+import ListItemDecorator from "@mui/joy/ListItemDecorator";
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 
 import { ColorSchemeToggle } from "./ColorToggle";
 import { useAuth } from "../hooks/useAuth";
+
 import Logo from "../assets/logo.svg";
 
 const Header = () => {
@@ -88,13 +85,17 @@ const Header = () => {
               />
             </MenuButton>
             <Menu variant="solid" color="primary" size="sm">
-              <MenuItem onClick={handleProfile}>
-                <FontAwesomeIcon icon={faUser} />
+              <MenuItem onClick={handleProfile} >
+                <ListItemDecorator>
+                  <PersonOutlinedIcon />
+                </ListItemDecorator>
                 Profile
               </MenuItem>
-              <Divider orientation="horizontal" color="red" />
+              <Divider orientation="horizontal" />
               <MenuItem onClick={handleLogOut}>
-                <FontAwesomeIcon icon={faArrowRightFromBracket} />
+                <ListItemDecorator>
+                  <LogoutOutlinedIcon />
+                </ListItemDecorator>
                 Log Out
               </MenuItem>
             </Menu>
