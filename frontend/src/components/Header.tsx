@@ -102,7 +102,7 @@ const Header = () => {
           </Dropdown>
         ) : (
           <>
-            <Button variant="outlined" onClick={handleLogin}>
+            <Button variant="outlined" sx={{ whiteSpace: "nowrap" }} onClick={handleLogin}>
               Log In
             </Button>
             <Button variant="solid" onClick={handleRegister}>
