@@ -16,76 +16,87 @@ type StatusChipProps = {
   updateStatus: (newState: Status) => void;
 };
 
-export const ReportTable = (props: ReportTableProps) =>
-(
-  <Sheet
-    variant="outlined"
-    sx={{
-      width: "80%",
-      borderRadius: "md",
-      overflow: "auto",
-      minHeight: 0,
-    }}
-  >
-    <Table
-      stickyHeader
-      hoverRow
+export const ReportTable = (props: ReportTableProps) => {
+  const [reports, setReports] = useState(props.reports);
+
+  const removeReport = (reportId: number) => {
+    setReports(reports.filter((report) => report.reportId !== reportId));
+  };
+  return (
+    <Sheet
+      variant="outlined"
       sx={{
-        "--TableCell-headBackground": "var(--joy-palette-background-level1)",
-        "--Table-headerUnderlineThickness": "1px",
-        "--TableRow-hoverBackground": "var(--joy-palette-background-level1)",
-        "--TableCell-paddingY": "8px",
-        "--TableCell-paddingX": "8px",
+        width: "80%",
+        borderRadius: "md",
+        overflow: "auto",
+        minHeight: 0,
       }}
     >
-      <thead>
-        <tr >
-          <th style={{ textAlign: "center" }}>
-            <Typography level="title-lg">
-              Status
-            </Typography>
-          </th>
-          <th style={{ textAlign: "center" }}>
-            <Typography level="title-lg">
-              Date
-            </Typography>
-          </th>
-          <th style={{ textAlign: "center" }}>
-            <Typography level="title-lg">
-              Reason
-            </Typography>
-          </th>
-          <th style={{ textAlign: "center" }}>
-            <Typography level="title-lg">
-              Description
-            </Typography>
-          </th>
-          <th style={{ textAlign: "center" }}>
-            <Typography level="title-lg">
-              Link
-            </Typography>
-          </th>
-          <th style={{ textAlign: "center", width: "80px" }}>
-            <Typography level="title-lg">
-              Actions
-            </Typography>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {props.reports.map((report) => (
-          <ReportRow report={report} key={report.reportId} />
-        ))}
-      </tbody>
-    </Table>
-  </Sheet>);
+      <Table
+        stickyHeader
+        hoverRow
+        sx={{
+          "--TableCell-headBackground": "var(--joy-palette-background-level1)",
+          "--Table-headerUnderlineThickness": "1px",
+          "--TableRow-hoverBackground": "var(--joy-palette-background-level1)",
+          "--TableCell-paddingY": "8px",
+          "--TableCell-paddingX": "8px",
+        }}
+      >
+        <thead>
+          <tr >
+            <th style={{ textAlign: "center" }}>
+              <Typography level="title-lg">
+                Status
+              </Typography>
+            </th>
+            <th style={{ textAlign: "center" }}>
+              <Typography level="title-lg">
+                Date
+              </Typography>
+            </th>
+            <th style={{ textAlign: "center" }}>
+              <Typography level="title-lg">
+                Reason
+              </Typography>
+            </th>
+            <th style={{ textAlign: "center" }}>
+              <Typography level="title-lg">
+                Description
+              </Typography>
+            </th>
+            <th style={{ textAlign: "center" }}>
+              <Typography level="title-lg">
+                Link
+              </Typography>
+            </th>
+            <th style={{ textAlign: "center", width: "80px" }}>
+              <Typography level="title-lg">
+                Actions
+              </Typography>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {reports.map((report) => (
+            <ReportRow report={report} key={report.reportId} removeReport={removeReport} />
+          ))}
+        </tbody>
+      </Table>
+    </Sheet>);
+};
 
 type ReportRowProps = {
   report: Report;
+  removeReport: (reportId: number) => void;
 };
 
-const ReportRow = ({ report }: ReportRowProps) => {
+const ReportRow = ({ report, removeReport }: ReportRowProps) => {
   const [status, setStatus] = useState(report.status);
+
+  const simulateDeletion = () => {
+    removeReport(report.reportId);
+  };
 
   return (
     <tr>
@@ -111,7 +122,7 @@ const ReportRow = ({ report }: ReportRowProps) => {
         </Link>
       </td>
       <td style={{ textAlign: "center" }}>
-        <IconButton variant="plain" color="danger">
+        <IconButton variant="plain" color="danger" onClick={simulateDeletion}>
           <DeleteOutlined />
         </IconButton>
       </td>
