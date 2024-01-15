@@ -117,7 +117,7 @@ const ReportRow = ({ report, removeReport }: ReportRowProps) => {
         </div>
       </td>
       <td style={{ textAlign: "center" }}>
-        <Link href={`/offer/${report.reportedOfferId}`} >
+        <Link href={`/offers/${report.reportedOfferId}`} >
           Go to offer
         </Link>
       </td>
