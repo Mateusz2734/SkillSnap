@@ -149,8 +149,10 @@ export const OfferCard = (props: OfferCardProps) => {
         <Typography level="title-lg" sx={{ mt: "calc(var(--icon-size) / 2)" }}>
           {props.offer.skill}
         </Typography>
-        <CardContent sx={{ maxWidth: "40ch" }}>
-          {props.offer.description}
+        <CardContent sx={{ maxWidth: "330px" }}>
+          <Typography noWrap>
+            {props.offer.description}
+          </Typography>
         </CardContent>
         <CardActions
           orientation={buttonOrientation}
