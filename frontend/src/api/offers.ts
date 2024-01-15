@@ -55,7 +55,7 @@ export function useGetUserOffers(userId: number) {
   });
 }
 
-export function useGetOffer(offerId: number) {
+export function useGetOffer(offerId: number | undefined) {
   const { token } = useAuth();
 
   const config = { headers: { Authorization: `Bearer ${token}` } };
@@ -74,6 +74,7 @@ export function useGetOffer(offerId: number) {
         return Promise.reject(e.response?.data);
       }
     },
+    enabled: !!offerId,
     throwOnError: false,
   });
 }

@@ -160,6 +160,10 @@ export type GetUsersResponse = Status & {
   users: User[];
 };
 
+export type GetUserResponse = Status & {
+  user: User;
+};
+
 export type DeleteUserResponse = Status;
 
 export type GetReviewsResponse = Status & {
