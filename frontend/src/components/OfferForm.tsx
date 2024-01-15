@@ -5,12 +5,12 @@ import { useTheme } from "@mui/joy";
 import { PostOfferPayload } from "../types/types";
 import { skills } from "../data/skills";
 import { usePostOffer } from "../api/offers";
+import { toast } from "react-toastify";
 
 type FormValues = PostOfferPayload;
 
 export const OfferForm = () => {
   const { mutate } = usePostOffer();
-  const theme = useTheme();
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -19,6 +19,7 @@ export const OfferForm = () => {
     },
     onSubmit: (values) => {
       mutate(values);
+      toast.success("Offer posted!");
     },
     validate(values) {
       const errors: Partial<FormValues> = {};
@@ -32,16 +33,15 @@ export const OfferForm = () => {
     },
   });
 
+  const skillError = formik.touched.skill && formik.errors.skill;
+  const descriptionError = formik.touched.description && formik.errors.description;
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <Select
         sx={{
           width: 343,
           marginBottom: "1em",
-          backgroundColor:
-            formik.touched.skill && formik.errors.skill
-              ? theme.vars.palette.danger[200]
-              : null,
         }}
         id="skill"
         name="skill"
@@ -51,6 +51,7 @@ export const OfferForm = () => {
         }
         onBlur={formik.handleBlur}
         value={formik.values.skill}
+        color={skillError ? "danger" : "neutral"}
       >
         {skills.map((skill) => (
           <Option key={skill} value={skill}>
@@ -63,10 +64,6 @@ export const OfferForm = () => {
         sx={{
           width: 343,
           marginBottom: "1em",
-          backgroundColor:
-            formik.touched.description && formik.errors.description
-              ? theme.vars.palette.danger[200]
-              : null,
         }}
         id="description"
         name="description"
@@ -75,6 +72,7 @@ export const OfferForm = () => {
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.description}
+        color={descriptionError ? "danger" : "neutral"}
       />
       <Button type="submit" fullWidth>Submit</Button>
     </form>
