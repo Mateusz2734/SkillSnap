@@ -106,6 +106,32 @@ func (app *application) getUsers(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (app *application) getUser(w http.ResponseWriter, r *http.Request) {
+	userID, err := strconv.ParseInt(flow.Param(r.Context(), "userId"), 10, 32)
+
+	if err != nil {
+		app.badRequest(w, r, err)
+		return
+	}
+
+	user, err := app.db.GetUserById(r.Context(), int32(userID))
+
+	if err != nil && err != pgx.ErrNoRows {
+		app.serverError(w, r, err)
+		return
+	}
+
+	data := map[string]interface{}{
+		"user": user,
+	}
+
+	err = response.JSONSuccess(w, data)
+
+	if err != nil {
+		app.serverError(w, r, err)
+	}
+}
+
 func (app *application) deleteUser(w http.ResponseWriter, r *http.Request) {
 	userID, err := strconv.ParseInt(flow.Param(r.Context(), "userId"), 10, 32)
 

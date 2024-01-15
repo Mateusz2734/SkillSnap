@@ -163,7 +163,7 @@ func (app *application) deleteOffer(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) getOffer(w http.ResponseWriter, r *http.Request) {
-	offerID, err := strconv.ParseInt(flow.Param(r.Context(), "offerID"), 10, 32)
+	offerID, err := strconv.ParseInt(flow.Param(r.Context(), "offerId"), 10, 32)
 
 	if err != nil {
 		app.badRequest(w, r, err)

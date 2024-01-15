@@ -29,6 +29,7 @@ func (app *application) routes() http.Handler {
 		mux.HandleFunc("/offers", app.addOffer, "POST")
 		mux.HandleFunc("/offers/:offerId", app.deleteOffer, "DELETE")
 		mux.HandleFunc("/offers/:offerId", app.getOffer, "GET")
+		mux.HandleFunc("/users/:userId", app.getUser, "GET")
 		mux.HandleFunc("/users/:userId", app.deleteUser, "DELETE")
 		mux.HandleFunc("/users/:userId/offers", app.getUserOffers, "GET")
 		mux.HandleFunc("/categories", app.getCategories, "GET")
@@ -48,7 +49,7 @@ func (app *application) routes() http.Handler {
 		mux.HandleFunc("/admin/reports/:reportId", app.deleteReport, "DELETE")
 		mux.HandleFunc("/admin/users", app.getUsers, "GET")
 		mux.HandleFunc("/admin/stats/general", app.getGeneralStats, "GET")
-		mux.HandleFunc("/admin/stats/users/:userID", app.getUserStats, "GET")
+		mux.HandleFunc("/admin/stats/users/:userId", app.getUserStats, "GET")
 	})
 
 	return mux
