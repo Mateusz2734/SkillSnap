@@ -1,17 +1,18 @@
+import { lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import RequireAuth from "./components/RequireAuth";
 
-import Register from "./pages/RegisterPage";
-import Login from "./pages/LoginPage";
-import Layout from "./components/Layout";
-import Admin from "./pages/AdminPage";
-import Missing from "./pages/MissingPage";
-import Unauthorized from "./pages/UnauthorizedPage";
-import PublicPage from "./pages/PublicPage";
-import OffersPage from "./pages/OffersPage";
-import Profile from "./pages/ProfilePage";
-import OfferDetailsPage from "./pages/OfferDetailsPage";
+const Register = lazy(() => import("./pages/RegisterPage"));
+const Login = lazy(() => import("./pages/LoginPage"));
+const Layout = lazy(() => import("./components/Layout"));
+const Admin = lazy(() => import("./pages/AdminPage"));
+const Missing = lazy(() => import("./pages/MissingPage"));
+const Unauthorized = lazy(() => import("./pages/UnauthorizedPage"));
+const PublicPage = lazy(() => import("./pages/PublicPage"));
+const OffersPage = lazy(() => import("./pages/OffersPage"));
+const Profile = lazy(() => import("./pages/ProfilePage"));
+const OfferDetailsPage = lazy(() => import("./pages/OfferDetailsPage"));
 
 const ROLES = {
   User: "user",
