@@ -66,14 +66,8 @@ export type GetAuthLogoutResponse = Status;
 
 export type GetHealthResponse = Status;
 
-type Meta = {
-  offset: number;
-  limit: number;
-};
-
 export type GetOffersResponse = Status & {
   offers: Offer[];
-  meta: Meta;
 };
 
 export type PostOfferResponse = Status & {
