@@ -11,6 +11,7 @@ import Unauthorized from "./pages/UnauthorizedPage";
 import PublicPage from "./pages/PublicPage";
 import OffersPage from "./pages/OffersPage";
 import Profile from "./pages/ProfilePage";
+import OfferDetailsPage from "./pages/OfferDetailsPage";
 
 const ROLES = {
   User: "user",
@@ -32,6 +33,7 @@ function App() {
           element={<RequireAuth allowedRoles={[ROLES.User, ROLES.Admin]} />}
         >
           <Route path="/offers" element={<OffersPage />} />
+          <Route path="/offers/:offerId" element={<OfferDetailsPage />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
 
