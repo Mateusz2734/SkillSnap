@@ -1,6 +1,5 @@
 import { Option, Select, Textarea, Button } from "@mui/joy";
 import { useFormik } from "formik";
-import { useTheme } from "@mui/joy";
 
 import { PostOfferPayload } from "../types/types";
 import { skills } from "../data/skills";
