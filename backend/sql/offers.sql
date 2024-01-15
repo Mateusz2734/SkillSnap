@@ -12,9 +12,7 @@ WHERE
 -- name: GetOffers :many
 SELECT
     *
-FROM offers
-LIMIT $1
-OFFSET $2;
+FROM offers;
 
 -- name: GetOfferById :one
 SELECT
@@ -40,6 +38,4 @@ SELECT
 FROM offers
 INNER JOIN skills ON offers.skill = skills.skill
 INNER JOIN skill_categories ON skills.skill = skill_categories.skill
-WHERE skill_categories.category = $1
-LIMIT $2
-OFFSET $3;
+WHERE skill_categories.category = $1;

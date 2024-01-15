@@ -14,34 +14,20 @@ import (
 
 func (app *application) getOffers(w http.ResponseWriter, r *http.Request) {
 	var offers []*db.Offer
+	var err error
 
 	category := r.URL.Query().Get("category")
-	limitQuery := r.URL.Query().Get("limit")
-	offsetQuery := r.URL.Query().Get("offset")
-
-	limit, err := strconv.ParseInt(limitQuery, 10, 32)
-
-	if err != nil {
-		limit = 10
-	}
-
-	offset, err := strconv.ParseInt(offsetQuery, 10, 32)
-
-	if err != nil {
-		offset = 0
-	}
 
 	if category != "" {
-		params := db.GetOffersByCategoryParams{Category: category, Limit: int32(limit), Offset: int32(offset)}
-		offers, err = app.db.GetOffersByCategory(r.Context(), params)
+		offers, err = app.db.GetOffersByCategory(r.Context(), category)
 
 		if err != nil && err != pgx.ErrNoRows {
 			app.serverError(w, r, err)
 			return
 		}
 	} else {
-		params := db.GetOffersParams{Limit: int32(limit), Offset: int32(offset)}
-		offers, err = app.db.GetOffers(r.Context(), params)
+
+		offers, err = app.db.GetOffers(r.Context())
 
 		if err != nil && err != pgx.ErrNoRows {
 			app.serverError(w, r, err)
@@ -50,10 +36,6 @@ func (app *application) getOffers(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := map[string]interface{}{
-		"meta": map[string]interface{}{
-			"limit":  limit,
-			"offset": offset,
-		},
 		"offers": offers,
 	}
 

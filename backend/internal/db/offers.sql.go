@@ -71,17 +71,10 @@ const getOffers = `-- name: GetOffers :many
 SELECT
     created_at, offer_id, user_id, skill, description
 FROM offers
-LIMIT $1
-OFFSET $2
 `
 
-type GetOffersParams struct {
-	Limit  int32 `json:"limit"`
-	Offset int32 `json:"offset"`
-}
-
-func (q *Queries) GetOffers(ctx context.Context, arg GetOffersParams) ([]*Offer, error) {
-	rows, err := q.db.Query(ctx, getOffers, arg.Limit, arg.Offset)
+func (q *Queries) GetOffers(ctx context.Context) ([]*Offer, error) {
+	rows, err := q.db.Query(ctx, getOffers)
 	if err != nil {
 		return nil, err
 	}
@@ -117,18 +110,10 @@ FROM offers
 INNER JOIN skills ON offers.skill = skills.skill
 INNER JOIN skill_categories ON skills.skill = skill_categories.skill
 WHERE skill_categories.category = $1
-LIMIT $2
-OFFSET $3
 `
 
-type GetOffersByCategoryParams struct {
-	Category string `json:"category"`
-	Limit    int32  `json:"limit"`
-	Offset   int32  `json:"offset"`
-}
-
-func (q *Queries) GetOffersByCategory(ctx context.Context, arg GetOffersByCategoryParams) ([]*Offer, error) {
-	rows, err := q.db.Query(ctx, getOffersByCategory, arg.Category, arg.Limit, arg.Offset)
+func (q *Queries) GetOffersByCategory(ctx context.Context, category string) ([]*Offer, error) {
+	rows, err := q.db.Query(ctx, getOffersByCategory, category)
 	if err != nil {
 		return nil, err
 	}
