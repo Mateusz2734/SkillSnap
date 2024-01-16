@@ -26,10 +26,11 @@ export const ReportTable = (props: ReportTableProps) => {
     <Sheet
       variant="outlined"
       sx={{
-        width: "80%",
+        width: "90%",
         borderRadius: "md",
         overflow: "auto",
         minHeight: 0,
+        maxHeight: "50vh",
       }}
     >
       <Table
