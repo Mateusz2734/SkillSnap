@@ -150,7 +150,7 @@ export const OfferCard = (props: OfferCardProps) => {
           {props.offer.skill}
         </Typography>
         <CardContent sx={{ maxWidth: "330px" }}>
-          <Typography noWrap>
+          <Typography noWrap={!props.editable}>
             {props.offer.description}
           </Typography>
         </CardContent>
@@ -159,7 +159,6 @@ export const OfferCard = (props: OfferCardProps) => {
           buttonFlex={1}
           sx={{
             "--Button-radius": "40px",
-            // width: "clamp(min(100%, 200px), 50%, min(100%, 200px))",
           }}
         >
           {buttonSection}
