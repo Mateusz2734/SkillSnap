@@ -115,6 +115,6 @@ const Header = () => {
   );
 };
 
-const apiUrl = "https://api.dicebear.com/7.x/identicon/svg";
+export const apiUrl = "https://api.dicebear.com/7.x/identicon/svg";
 
 export default Header;

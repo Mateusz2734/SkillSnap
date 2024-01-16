@@ -1,22 +1,31 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+
+import { OfferDetailsCard } from "../components/OfferDetailsCard";
 import { useGetOffer } from "../api/offers";
 import { useGetUser } from "../api/user";
+import SpinnerPage from "./SpinnerPage";
+import { Stack } from "@mui/joy";
 
 const OfferDetails = () => {
+    const navigate = useNavigate();
     const { offerId } = useParams();
-    const { data: offerData } = useGetOffer(Number(offerId));
-    const { data: userData } = useGetUser(offerData?.offer?.userId);
 
-    // console.log(status, fetchStatus);
+    const { data: offerData, isLoading: offerLoading } = useGetOffer(Number(offerId));
+    const { data: userData, isLoading: userLoading } = useGetUser(offerData?.offer?.userId);
+
+    if (offerLoading || userLoading) {
+        return <SpinnerPage />;
+    }
+
+    if (!offerData || !userData) {
+        navigate("/404", { replace: true });
+        return;
+    }
+
     return (
-        <div>
-            <h1>Offer Details</h1>
-            <p>Offer ID: {offerId}</p>
-            <p>Offer: {offerData?.offer.skill}</p>
-            <p>Offer user: {offerData?.offer.userId}</p>
-            <p>User: {userData?.user?.username}</p>
-            <p>User Discord Username: {userData?.user?.discordUsername}</p>
-        </div>
+        <Stack justifyContent="center" alignItems="center" sx={{ minHeight: "60vh" }}>
+            <OfferDetailsCard user={userData.user} offer={offerData.offer} />
+        </Stack>
     );
 };
 
