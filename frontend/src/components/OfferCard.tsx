@@ -1,25 +1,25 @@
 import { useState } from "react";
-import { DeleteOutlined, OutlinedFlag, MoreVert, EditOutlined } from "@mui/icons-material";
-import {
-  Typography,
-  CardOverflow,
-  AspectRatio,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  MenuButton,
-  Dropdown,
-  Menu,
-  MenuItem,
-  IconButton,
-  ListItemDecorator,
-  Modal,
-  ModalDialog,
-  DialogTitle,
-  DialogContent,
-} from "@mui/joy";
 import { Link } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import FlagIcon from "@mui/icons-material/OutlinedFlag";
+import MoreIcon from "@mui/icons-material/MoreVert";
+import Typography from "@mui/joy/Typography";
+import CardOverflow from "@mui/joy/CardOverflow";
+import AspectRatio from "@mui/joy/AspectRatio";
+import Button from "@mui/joy/Button";
+import Card from "@mui/joy/Card";
+import CardActions from "@mui/joy/CardActions";
+import CardContent from "@mui/joy/CardContent";
+import MenuButton from "@mui/joy/MenuButton";
+import Dropdown from "@mui/joy/Dropdown";
+import Menu from "@mui/joy/Menu";
+import MenuItem from "@mui/joy/MenuItem";
+import IconButton from "@mui/joy/IconButton";
+import ListItemDecorator from "@mui/joy/ListItemDecorator";
+import Modal from "@mui/joy/Modal";
+import ModalDialog from "@mui/joy/ModalDialog";
+import DialogTitle from "@mui/joy/DialogTitle";
+import DialogContent from "@mui/joy/DialogContent";
 import { SxProps } from "@mui/joy/styles/types";
 
 import { Offer } from "../types/types";
@@ -38,14 +38,9 @@ export const OfferCard = (props: OfferCardProps) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const buttonSection = props.editable ? (
-    <>
-      <IconButton variant="plain" color="danger" onClick={() => mutate()}>
-        <DeleteOutlined />
-      </IconButton>
-      <IconButton variant="plain" >
-        <EditOutlined />
-      </IconButton>
-    </>
+    <IconButton variant="plain" color="danger" onClick={() => mutate()}>
+      <DeleteIcon />
+    </IconButton>
   ) : (
     <Link to={`/offers/${props.offer.offerId}`}>
       <Button variant="solid" color="primary">
@@ -77,13 +72,13 @@ export const OfferCard = (props: OfferCardProps) => {
         slotProps={{ root: { variant: "plain", color: "neutral" } }}
         size="sm"
       >
-        <MoreVert sx={{ color: "var(--joy-palette-background-level1)" }} />
+        <MoreIcon sx={{ color: "var(--joy-palette-background-level1)" }} />
       </MenuButton>
       <Menu size="sm">
         {user?.userId !== props.offer.userId && (
           <MenuItem onClick={() => setOpen(true)}>
             <ListItemDecorator>
-              <OutlinedFlag />
+              <FlagIcon />
             </ListItemDecorator>
             Report offer
           </MenuItem>
@@ -92,7 +87,7 @@ export const OfferCard = (props: OfferCardProps) => {
         {(user?.role === "admin" || props.offer.userId === user?.userId) && (
           <MenuItem onClick={() => mutate()} color="danger">
             <ListItemDecorator>
-              <DeleteOutlined />
+              <DeleteIcon />
             </ListItemDecorator>
             Delete offer
           </MenuItem>
