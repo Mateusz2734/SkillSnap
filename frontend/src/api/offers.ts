@@ -86,7 +86,7 @@ export function useDeleteOffer(offerId: number) {
   const config = { headers: { Authorization: `Bearer ${token}` } };
 
   return useMutation<DeleteOfferResponse, ApiError>({
-    mutationKey: ["offers", `offers-user:${user?.userId}`],
+    mutationKey: ["offers", `offer:${offerId}`],
     mutationFn: async () => {
       try {
         console.log(user?.userId);
@@ -106,7 +106,7 @@ export function useDeleteOffer(offerId: number) {
         queryKey: ["offers"],
       });
       queryClient.invalidateQueries({
-        queryKey: [`offers-user:${user?.userId}`],
+        queryKey: [`offer:${offerId}`],
       });
       queryClient.invalidateQueries({
         queryKey: ["stats"],
