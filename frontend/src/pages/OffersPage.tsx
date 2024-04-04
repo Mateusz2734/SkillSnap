@@ -37,7 +37,7 @@ const Offers = () => {
         </Modal>
       </Stack>
 
-      <Grid container spacing={4} >
+      <Grid container>
         {data?.offers.map((offer) => (
           <Grid key={offer.offerId} sx={{ flexGrow: 1, display: "flex", justifyContent: "center", alignItems: "center" }} >
             <OfferCard offer={offer} />
