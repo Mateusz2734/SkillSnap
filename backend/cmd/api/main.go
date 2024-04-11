@@ -62,7 +62,7 @@ func run(logger *slog.Logger) error {
 	flag.StringVar(&cfg.basicAuth.username, "basic-auth-username", "admin", "basic auth username")
 	flag.StringVar(&cfg.basicAuth.hashedPassword, "basic-auth-hashed-password", "$2a$04$uwpFTia9dnbm6qQeNQnODuDGWECMcIXTIXZ..QnUO8wbvgJ/9zbr2", "basic auth password hashed with bcrypt")
 	flag.StringVar(&cfg.cookie.secretKey, "cookie-secret-key", "eksj5rzofufmxg5jjfqlzzvjhf3jdl5y", "secret key for cookie authentication/encryption")
-	flag.StringVar(&cfg.db.dsn, "db-dsn", "postgresql://admin:admin@localhost:5432/wdai?sslmode=disable", "postgreSQL DSN")
+	flag.StringVar(&cfg.db.dsn, "db-dsn", "postgresql://admin:admin@database:5432/wdai?sslmode=disable", "postgreSQL DSN")
 	flag.StringVar(&cfg.jwt.secretKey, "jwt-secret-key", "hooi7qxyfyxucv6xzfag6ke4tp5ec3qi", "secret key for JWT authentication")
 
 	showVersion := flag.Bool("version", false, "display version and exit")
@@ -79,6 +79,12 @@ func run(logger *slog.Logger) error {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
 		os.Exit(1)
 	}
+
+	if err := pool.Ping(context.Background()); err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to ping database: %v\n", err)
+		os.Exit(1)
+	}
+
 	defer pool.Close()
 
 	db := db.New(pool)

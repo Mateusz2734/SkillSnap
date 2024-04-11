@@ -1,5 +1,6 @@
 services:
-  postgres:
+
+  database:
     build:
       context: .
       dockerfile: db.dockerfile
@@ -9,8 +10,19 @@ services:
       POSTGRES_DB: wdai
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-    # volumes:
-    #   - .:/db/:/data/postgres-tuto
     ports:
       - "5432:5432"
     restart: unless-stopped
+
+  backend:
+    image: golang:1.21
+    volumes:
+      - "./backend:/backend"
+    working_dir: /backend
+    container_name: backend
+    depends_on:
+      - database
+    ports:
+      - "4444:4444"
+    restart: unless-stopped
+    command: make run
