@@ -80,7 +80,7 @@ export function useGetOffer(offerId: number | undefined) {
 }
 
 export function useDeleteOffer(offerId: number) {
-  const { token, user } = useAuth();
+  const { token } = useAuth();
   const queryClient = useQueryClient();
 
   const config = { headers: { Authorization: `Bearer ${token}` } };
@@ -89,7 +89,6 @@ export function useDeleteOffer(offerId: number) {
     mutationKey: ["offers", `offer:${offerId}`],
     mutationFn: async () => {
       try {
-        console.log(user?.userId);
         const { data } = await api.delete<DeleteOfferResponse>(
           `/offers/${offerId}`,
           config

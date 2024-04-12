@@ -23,7 +23,6 @@ export const RegisterForm = () => {
         },
         onSubmit: async (values) => {
             let success = true;
-            console.log("values: ", values);
             try {
                 await api.post<PostUserResponse>(
                     "/users",
@@ -34,7 +33,6 @@ export const RegisterForm = () => {
                 let message = "An error occurred";
 
                 if (axios.isAxiosError(error)) {
-                    console.log(error.response);
                     if (!error.response) {
                         message = "Could not connect to the server";
                     } else if (error.response.status === 400) {
@@ -121,7 +119,7 @@ export const RegisterForm = () => {
                 <FormHelperText>{formik.touched.password ? formik.errors.password : null}</FormHelperText>
             </FormControl>
             <Stack gap={4} sx={{ mt: 2 }}>
-                <Button type="submit" fullWidth onClick={() => console.log(formik.errors)}>
+                <Button type="submit" fullWidth>
                     Sign in
                 </Button>
             </Stack>
