@@ -58,7 +58,7 @@ export const OfferDetailsCard = ({ user, offer }: OfferDetailsCardProps) => {
                     </MenuItem>
                 )}
 
-                {(user?.role === "admin" || offer.userId === user?.userId) && (
+                {(currentUser?.role === "admin" || offer.userId === currentUser?.userId) && (
                     <MenuItem onClick={() => {
                         mutate();
                         navigate(-1);
